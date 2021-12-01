@@ -1,2 +1,2 @@
-# aoc-2021-in-kotlin
-aoc-2021-in-kotlin
+# Advent of Code 2021
+Solutions in Kotlin
