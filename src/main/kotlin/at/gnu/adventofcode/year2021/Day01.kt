@@ -125,7 +125,7 @@ class Day01(private val measurements: List<Int>) {
         measurements.countIncreasingValues()
 
     fun part2(): Int =
-        measurements.windowed(3, 1).map { it.sum() }.countIncreasingValues()
+        measurements.windowed(3, 1) { it.sum() }.countIncreasingValues()
 
     private fun List<Int>.countIncreasingValues() =
         this.zipWithNext().count { it.second > it.first }
