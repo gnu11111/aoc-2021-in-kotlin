@@ -18,7 +18,7 @@ class Day01Test {
         val day01 = Day01(measurements)
         for (function in test.keys) {
             val result: Int
-            val time = measureNanoTime { result = function.invoke(day01) }
+            val time = measureNanoTime { result = function(day01) }
             println("Day01::${function.name}: $measurements -> $result [${time}ns]")
             Assert.assertEquals(test[function], result)
         }
