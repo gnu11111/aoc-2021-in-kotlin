@@ -88,24 +88,25 @@ class Day02(input: List<String>) {
     }
 
     private val commands: List<Command> = input.map { Command(it) }
+
     enum class NavigationMethod { NORMAL, USE_AIM }
-    data class Position(val horizontal: Int = 0, val depth: Int = 0, val aim: Int = 0)
+    data class Submarine(val horizontalPosition: Int = 0, val depth: Int = 0, val aim: Int = 0)
 
     fun part1(): Int {
-        val (horizontalPosition, depth) = commands.fold(Position()) {
+        val (horizontalPosition, depth) = commands.fold(Submarine()) {
                 acc, command -> command.action.invoke(acc, NavigationMethod.NORMAL)
         }
         return (horizontalPosition * depth)
     }
 
     fun part2(): Int {
-        val (horizontalPosition, depth) = commands.fold(Position()) {
+        val (horizontalPosition, depth) = commands.fold(Submarine()) {
                 acc, command -> command.action.invoke(acc, NavigationMethod.USE_AIM)
         }
         return (horizontalPosition * depth)
     }
 
-    sealed class Command(val action: (Position, NavigationMethod) -> Position)
+    sealed class Command(val action: (Submarine, NavigationMethod) -> Submarine)
     private fun Command(line: String): Command {
         val (command, amount) = line.split("""\s""".toRegex())
         return when (command) {
@@ -118,22 +119,22 @@ class Day02(input: List<String>) {
 
     class Forward(private val amount: Int) : Command({ it, method ->
         when (method) {
-            NavigationMethod.NORMAL -> Position(it.horizontal + amount, it.depth, 0)
-            NavigationMethod.USE_AIM -> Position(it.horizontal + amount, it.depth + (it.aim * amount), it.aim)
+            NavigationMethod.NORMAL -> Submarine(it.horizontalPosition + amount, it.depth, 0)
+            NavigationMethod.USE_AIM -> Submarine(it.horizontalPosition + amount, it.depth + (it.aim * amount), it.aim)
         }
     })
 
     class Up(private val amount: Int) : Command({ it, method ->
         when (method) {
-            NavigationMethod.NORMAL -> Position(it.horizontal, it.depth - amount, 0)
-            NavigationMethod.USE_AIM -> Position(it.horizontal, it.depth, it.aim - amount)
+            NavigationMethod.NORMAL -> Submarine(it.horizontalPosition, it.depth - amount, 0)
+            NavigationMethod.USE_AIM -> Submarine(it.horizontalPosition, it.depth, it.aim - amount)
         }
     })
 
     class Down(private val amount: Int) : Command({ it, method ->
         when (method) {
-            NavigationMethod.NORMAL -> Position(it.horizontal, it.depth + amount, 0)
-            NavigationMethod.USE_AIM -> Position(it.horizontal, it.depth, it.aim + amount)
+            NavigationMethod.NORMAL -> Submarine(it.horizontalPosition, it.depth + amount, 0)
+            NavigationMethod.USE_AIM -> Submarine(it.horizontalPosition, it.depth, it.aim + amount)
         }
     })
 }
