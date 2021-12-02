@@ -1,5 +1,5 @@
 /**
- * 2021 - DAY 1: SONAR SWEEP
+ * ADVENT OF CODE 2021 - DAY 1: SONAR SWEEP
  *
  * You're minding your own business on a ship at sea when the overboard alarm
  * goes off! You rush to see if you can help. Apparently, one of the Elves
