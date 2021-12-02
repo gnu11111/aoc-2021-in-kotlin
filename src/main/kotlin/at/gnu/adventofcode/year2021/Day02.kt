@@ -103,9 +103,9 @@ class Day02(commandLines: List<String>) {
     }
 
     private fun navigateSubmarine(method: NavigationMethod): Submarine =
-        commands.fold(Submarine()) { acc, command -> command.action.invoke(acc, method) }
+        commands.fold(Submarine()) { submarine, command -> command.navigate(submarine, method) }
 
-    sealed class Command(val action: (Submarine, NavigationMethod) -> Submarine)
+    sealed class Command(val navigate: (Submarine, NavigationMethod) -> Submarine)
     private fun Command(line: String): Command {
         val (command, amount) = line.split("""\s""".toRegex())
         return when (command) {
