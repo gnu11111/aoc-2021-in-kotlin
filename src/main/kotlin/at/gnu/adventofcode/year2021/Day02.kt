@@ -93,18 +93,17 @@ class Day02(commandLines: List<String>) {
     data class Submarine(val horizontalPosition: Int = 0, val depth: Int = 0, val aim: Int = 0)
 
     fun part1(): Int {
-        val (horizontalPosition, depth) = commands.fold(Submarine()) {
-                acc, command -> command.action.invoke(acc, NavigationMethod.NORMAL)
-        }
+        val (horizontalPosition, depth) = navigateSubmarine(NavigationMethod.NORMAL)
         return (horizontalPosition * depth)
     }
 
     fun part2(): Int {
-        val (horizontalPosition, depth) = commands.fold(Submarine()) {
-                acc, command -> command.action.invoke(acc, NavigationMethod.USE_AIM)
-        }
+        val (horizontalPosition, depth) = navigateSubmarine(NavigationMethod.USE_AIM)
         return (horizontalPosition * depth)
     }
+
+    private fun navigateSubmarine(method: NavigationMethod): Submarine =
+        commands.fold(Submarine()) { acc, command -> command.action.invoke(acc, method) }
 
     sealed class Command(val action: (Submarine, NavigationMethod) -> Submarine)
     private fun Command(line: String): Command {
