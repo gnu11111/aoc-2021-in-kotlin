@@ -140,9 +140,9 @@ class Day03(private val diagnosticReport: List<String>) {
 
     fun part1(): Int {
         val sumOfOnes = IntArray(binaryDigits) { position -> diagnosticReport.count { it[position] == '1' } }
-        val gammaRate = sumOfOnes.cconvertToBinaryStringByMajorityOfOnes()
-        val epsilonRate = gammaRate.negate()
-        return (gammaRate.convertToInt() * epsilonRate.convertToInt())
+        val gammaRate = sumOfOnes.convertToBinaryStringByMajorityOfOnes()
+        val epsilonRate = gammaRate.negateBinary()
+        return (gammaRate.convertBinaryToInt() * epsilonRate.convertBinaryToInt())
     }
 
     fun part2(): Int {
@@ -152,7 +152,7 @@ class Day03(private val diagnosticReport: List<String>) {
         val co2ScrubberRating = (0..binaryDigits).fold(diagnosticReport) { acc, position ->
             acc.filterLines(position, FilterType.MINORITY_OF_0)
         }
-        return (oxygenGeneratorRating.first().convertToInt() * co2ScrubberRating.first().convertToInt())
+        return (oxygenGeneratorRating.first().convertBinaryToInt() * co2ScrubberRating.first().convertBinaryToInt())
     }
 
     private fun List<String>.filterLines(position: Int, type: FilterType) =
@@ -166,13 +166,13 @@ class Day03(private val diagnosticReport: List<String>) {
         } else
             this
 
-    private fun IntArray.cconvertToBinaryStringByMajorityOfOnes() =
+    private fun IntArray.convertToBinaryStringByMajorityOfOnes() =
         this.map { if (it > (diagnosticReport.size / 2)) '1' else '0' }.joinToString("")
 
-    private fun String.negate() =
+    private fun String.negateBinary() =
         this.replace('0', 'x').replace('1', '0').replace('x', '1')
 
-    private fun String.convertToInt() =
+    private fun String.convertBinaryToInt() =
         Integer.parseInt(this, 2)
 }
 
