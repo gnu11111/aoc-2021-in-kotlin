@@ -136,7 +136,7 @@ class Day03(private val diagnosticReport: List<String>) {
     }
 
     enum class FilterType { MAJORITY_1, MINORITY_0 }
-    private val amounts = List(diagnosticReport[0].length) { i -> diagnosticReport.count { it[i] == '1' } }
+    private val amounts = IntArray(diagnosticReport[0].length) { i -> diagnosticReport.count { it[i] == '1' } }
 
     fun part1(): Int {
         val gammaRate = amounts.toBinaryString()
@@ -165,7 +165,7 @@ class Day03(private val diagnosticReport: List<String>) {
         } else
             this
 
-    private fun List<Int>.toBinaryString() =
+    private fun IntArray.toBinaryString() =
         this.map { if (it > (diagnosticReport.size / 2)) '1' else '0' }.joinToString("")
 
     private fun String.negate() =
