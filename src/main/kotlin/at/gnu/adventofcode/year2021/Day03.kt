@@ -135,37 +135,38 @@ class Day03(private val diagnosticReport: List<String>) {
         const val input = "/adventofcode/year2021/Day03.txt"
     }
 
-    enum class FilterType { MAJORITY_1, MINORITY_0 }
-    private val amounts = IntArray(diagnosticReport[0].length) { i -> diagnosticReport.count { it[i] == '1' } }
+    enum class FilterType { MAJORITY_OF_1, MINORITY_OF_0 }
+    private val binaryDigits = diagnosticReport[0].length
 
     fun part1(): Int {
-        val gammaRate = amounts.toBinaryString()
+        val sumOfOnes = IntArray(binaryDigits) { position -> diagnosticReport.count { it[position] == '1' } }
+        val gammaRate = sumOfOnes.cconvertToBinaryStringByMajorityOfOnes()
         val epsilonRate = gammaRate.negate()
         return (gammaRate.convertToInt() * epsilonRate.convertToInt())
     }
 
     fun part2(): Int {
-        val oxygenGeneratorRating = amounts.indices.fold(diagnosticReport) { acc, i ->
-            acc.filterLines(i, FilterType.MAJORITY_1)
+        val oxygenGeneratorRating = (0..binaryDigits).fold(diagnosticReport) { acc, position ->
+            acc.filterLines(position, FilterType.MAJORITY_OF_1)
         }
-        val co2ScrubberRating = amounts.indices.fold(diagnosticReport) { acc, i ->
-            acc.filterLines(i, FilterType.MINORITY_0)
+        val co2ScrubberRating = (0..binaryDigits).fold(diagnosticReport) { acc, position ->
+            acc.filterLines(position, FilterType.MINORITY_OF_0)
         }
         return (oxygenGeneratorRating.first().convertToInt() * co2ScrubberRating.first().convertToInt())
     }
 
-    private fun List<String>.filterLines(i: Int, type: FilterType) =
+    private fun List<String>.filterLines(position: Int, type: FilterType) =
         if (this.size > 1) {
-            val amount = this.count { it[i] == '1' }
-            val filterChar = if (amount >= ((this.size + 1) / 2)) '1' else '0'
+            val sumOfOnes = this.count { it[position] == '1' }
+            val digitToFilter = if (sumOfOnes >= ((this.size + 1) / 2)) '1' else '0'
             when (type) {
-                FilterType.MAJORITY_1 -> this.filter { it[i] == filterChar }
-                FilterType.MINORITY_0 -> this.filter { it[i] != filterChar }
+                FilterType.MAJORITY_OF_1 -> this.filter { it[position] == digitToFilter }
+                FilterType.MINORITY_OF_0 -> this.filter { it[position] != digitToFilter }
             }
         } else
             this
 
-    private fun IntArray.toBinaryString() =
+    private fun IntArray.cconvertToBinaryStringByMajorityOfOnes() =
         this.map { if (it > (diagnosticReport.size / 2)) '1' else '0' }.joinToString("")
 
     private fun String.negate() =
@@ -181,4 +182,3 @@ fun main() {
     println("Day03::part1 = ${day03.part1()}")
     println("Day03::part2 = ${day03.part2()}")
 }
-
