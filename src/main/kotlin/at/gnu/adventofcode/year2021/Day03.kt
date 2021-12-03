@@ -129,6 +129,8 @@
  */
 package at.gnu.adventofcode.year2021
 
+import kotlin.math.pow
+
 class Day03(private val diagnosticReport: List<String>) {
 
     companion object {
@@ -136,13 +138,13 @@ class Day03(private val diagnosticReport: List<String>) {
     }
 
     enum class FilterType { MAJORITY_OF_1, MINORITY_OF_0 }
-    private val binaryDigits = diagnosticReport[0].length
+    private val binaryDigits = diagnosticReport.first().length
 
     fun part1(): Int {
         val sumOfOnes = IntArray(binaryDigits) { position -> diagnosticReport.count { it[position] == '1' } }
-        val gammaRate = sumOfOnes.convertToBinaryStringByMajorityOfOnes()
-        val epsilonRate = gammaRate.negateBinary()
-        return (gammaRate.convertBinaryToInt() * epsilonRate.convertBinaryToInt())
+        val gammaRate = sumOfOnes.convertToBinaryStringByMajorityOfOnes().convertBinaryToInt()
+        val epsilonRate = gammaRate.binaryNegateInt()
+        return (gammaRate * epsilonRate)
     }
 
     fun part2(): Int {
@@ -169,11 +171,11 @@ class Day03(private val diagnosticReport: List<String>) {
     private fun IntArray.convertToBinaryStringByMajorityOfOnes() =
         this.map { if (it > (diagnosticReport.size / 2)) '1' else '0' }.joinToString("")
 
-    private fun String.negateBinary() =
-        this.replace('0', 'x').replace('1', '0').replace('x', '1')
-
     private fun String.convertBinaryToInt() =
         Integer.parseInt(this, 2)
+
+    private fun Int.binaryNegateInt() =
+        2.0.pow(binaryDigits).toInt() - 1 - this
 }
 
 fun main() {
