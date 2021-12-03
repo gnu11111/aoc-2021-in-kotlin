@@ -137,7 +137,7 @@ class Day03(private val diagnosticReport: List<String>) {
         const val input = "/adventofcode/year2021/Day03.txt"
     }
 
-    enum class FilterType { MAJORITY_OF_1, MINORITY_OF_0 }
+    enum class FilterType { MAJORITY, MINORITY }
     private val binaryDigits = diagnosticReport.first().length
 
     fun part1(): Int {
@@ -149,10 +149,10 @@ class Day03(private val diagnosticReport: List<String>) {
 
     fun part2(): Int {
         val oxygenGeneratorRating = (0..binaryDigits).fold(diagnosticReport) { acc, position ->
-            acc.filterLines(position, FilterType.MAJORITY_OF_1)
+            acc.filterLines(position, FilterType.MAJORITY)
         }
         val co2ScrubberRating = (0..binaryDigits).fold(diagnosticReport) { acc, position ->
-            acc.filterLines(position, FilterType.MINORITY_OF_0)
+            acc.filterLines(position, FilterType.MINORITY)
         }
         return (oxygenGeneratorRating.first().convertBinaryToInt() * co2ScrubberRating.first().convertBinaryToInt())
     }
@@ -162,8 +162,8 @@ class Day03(private val diagnosticReport: List<String>) {
             val sumOfOnes = this.count { it[position] == '1' }
             val digitToFilter = if (sumOfOnes >= ((this.size + 1) / 2)) '1' else '0'
             when (type) {
-                FilterType.MAJORITY_OF_1 -> this.filter { it[position] == digitToFilter }
-                FilterType.MINORITY_OF_0 -> this.filter { it[position] != digitToFilter }
+                FilterType.MAJORITY -> this.filter { it[position] == digitToFilter }
+                FilterType.MINORITY -> this.filter { it[position] != digitToFilter }
             }
         } else
             this
