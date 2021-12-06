@@ -30,36 +30,28 @@ class Day04(input: List<String>) {
         boards = newBoards.toList()
     }
 
-    fun part1(): Int {
-        for (round in 0 until (drawnNumbers.size - boardSize)) {
-            for (board in boards) {
-                for (numbers in board.winningNumbers) {
-                    if (drawnNumbers.subList(0, round + boardSize).containsAll(numbers)) {
-                        val allnumbers =
-                            board.winningNumbers.flatten().toSet() - drawnNumbers.subList(0, round + boardSize).toSet()
-                        return allnumbers.sum() * drawnNumbers[round + boardSize - 1]
-                    }
-                }
-            }
-        }
-        return -1
-    }
+    fun part1(): Int =
+        calculateWinningBoard(1)
 
-    fun part2(): Int {
+    fun part2(): Int =
+        calculateWinningBoard(boards.size)
+
+    private fun calculateWinningBoard(i: Int): Int {
         val winningBoards = mutableSetOf<Board>()
-        for (round in 0 until (drawnNumbers.size - boardSize)) {
+        val winningNumbers = mutableSetOf<Int>()
+        for (drawnNumber in drawnNumbers) {
+            winningNumbers.add(drawnNumber)
             for (board in boards) {
                 if (board in winningBoards)
                     continue
                 for (numbers in board.winningNumbers) {
-                    if (drawnNumbers.subList(0, round + boardSize).containsAll(numbers)) {
+                    if (winningNumbers.containsAll(numbers)) {
                         winningBoards.add(board)
-                        if (winningBoards.size == boards.size) {
-                            val allnumbers =
-                                board.winningNumbers.flatten().toSet() - drawnNumbers.subList(0, round + boardSize)
-                                    .toSet()
-                            return allnumbers.sum() * drawnNumbers[round + boardSize - 1]
+                        if (winningBoards.size == i) {
+                            val remainingNumbers = (board.winningNumbers.flatten().toSet() - winningNumbers).toSet()
+                            return remainingNumbers.sum() * winningNumbers.last()
                         }
+                        break
                     }
                 }
             }
