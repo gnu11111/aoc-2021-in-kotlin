@@ -99,6 +99,7 @@ class Day05(input: List<String>) {
 
     companion object {
         const val input = "/adventofcode/year2021/Day05.txt"
+        const val dangerousAmount = 1
     }
 
     data class Coordinate(val x: Int, val y: Int)
@@ -109,7 +110,7 @@ class Day05(input: List<String>) {
     init {
         val linesFromInput = mutableListOf<Line>()
         for (line in input) {
-            val (from, to) = line.split(" -> ").map { it.split(",") }.map { Coordinate(it[0].toInt(), it[1].toInt()) }
+            val (from, to) = line.split(" -> ").map { it.split(",") }.map { Coordinate(it[0].toInt(), it[dangerousAmount].toInt()) }
             linesFromInput.add(Line(from, to))
         }
         lines = linesFromInput.toList()
@@ -117,12 +118,12 @@ class Day05(input: List<String>) {
 
 
     fun part1(): Int =
-        calculateCoordinates()
+        calculateDangerousCoordinates()
 
     fun part2(): Int =
-        calculateCoordinates(withDiagonals = true)
+        calculateDangerousCoordinates(withDiagonals = true)
 
-    private fun calculateCoordinates(withDiagonals: Boolean = false): Int {
+    private fun calculateDangerousCoordinates(withDiagonals: Boolean = false): Int {
         val coordinates = mutableMapOf<Coordinate, Int>()
         for (line in lines) {
             if (!withDiagonals && (line.from.x != line.to.x) && (line.from.y != line.to.y))
@@ -131,10 +132,10 @@ class Day05(input: List<String>) {
                 val dx = line.to.x.compareTo(line.from.x) * i
                 val dy = line.to.y.compareTo(line.from.y) * i
                 val newCoordinate = Coordinate(line.from.x + dx, line.from.y + dy)
-                coordinates[newCoordinate] = (coordinates[newCoordinate] ?: 0) + 1
+                coordinates[newCoordinate] = (coordinates[newCoordinate] ?: 0) + dangerousAmount
             }
         }
-        return coordinates.values.count { it > 1 }
+        return coordinates.values.count { it > dangerousAmount }
     }
 }
 
