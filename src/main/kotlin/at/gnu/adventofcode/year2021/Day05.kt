@@ -128,10 +128,10 @@ class Day05(input: List<String>) {
         for (line in lines) {
             if (!withDiagonals && (line.from.x != line.to.x) && (line.from.y != line.to.y))
                 continue
+            val dx = line.to.x.compareTo(line.from.x)
+            val dy = line.to.y.compareTo(line.from.y)
             for (i in 0..max(abs(line.from.x - line.to.x), abs(line.from.y - line.to.y))) {
-                val dx = line.to.x.compareTo(line.from.x) * i
-                val dy = line.to.y.compareTo(line.from.y) * i
-                val newCoordinate = Coordinate(line.from.x + dx, line.from.y + dy)
+                val newCoordinate = Coordinate(line.from.x + (dx * i), line.from.y + (dy * i))
                 coordinates[newCoordinate] = (coordinates[newCoordinate] ?: 0) + 1
             }
         }
