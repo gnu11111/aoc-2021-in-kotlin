@@ -101,9 +101,8 @@ class Day06(input: List<Int>) {
 
     init {
         val timersFromInput = MutableList(numberOfDaysTillReproduction + 1) { 0L }
-        for (timer in input) {
-            timersFromInput[timer] = timersFromInput[timer] + 1
-        }
+        for (timer in input)
+            timersFromInput[timer]++
         reproductionTimers = timersFromInput.toList()
     }
 
