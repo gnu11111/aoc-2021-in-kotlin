@@ -88,6 +88,8 @@
  */
 package at.gnu.adventofcode.year2021
 
+import java.util.Collections.rotate
+
 class Day06(input: List<Int>) {
 
     companion object {
@@ -112,12 +114,10 @@ class Day06(input: List<Int>) {
         ageLanternfishPopulation(256).calculateAmountOfLanternfish()
 
     private fun ageLanternfishPopulation(days: Int): List<Long> {
-        var processTimers = reproductionTimers.toMutableList()
+        val processTimers = reproductionTimers.toMutableList()
         repeat(days) {
-            val reproducingLanternfish = processTimers.first()
-            processTimers = processTimers.drop(1) as MutableList<Long>
-            processTimers[numberOfDaysTillReproduction - 2] += reproducingLanternfish
-            processTimers += reproducingLanternfish
+            rotate(processTimers, -1)
+            processTimers[numberOfDaysTillReproduction - 2] += processTimers[numberOfDaysTillReproduction]
         }
         return processTimers
     }
