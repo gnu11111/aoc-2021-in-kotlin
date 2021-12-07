@@ -17,8 +17,8 @@ class Day07(input: List<Int>) {
     }
 
     fun part2(): Int {
-        val medium = crabPositions.sum() / crabPositions.size
-        return min(sumOfFuelCosts(medium), sumOfFuelCosts(medium + 1))
+        val arithmeticMean = crabPositions.sum() / crabPositions.size
+        return min(sumOfFuelCosts(arithmeticMean), sumOfFuelCosts(arithmeticMean + 1))
     }
 
     private fun sumOfFuelCosts(position: Int) =
