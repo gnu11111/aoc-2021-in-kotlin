@@ -101,12 +101,8 @@ class Day07(input: List<Int>) {
     }
 
     fun part2(): Int {
-        var min = -1
-        for (i in crabPositions.first()..crabPositions.last()) {
-            val fuel = crabPositions.sumOf { (abs(it - i) * (abs(it - i) + 1)) / 2 }
-            min = if (min < 0) fuel else if (fuel < min) fuel else break
-        }
-        return min
+        val medium = (crabPositions.sum() + 1) / crabPositions.size
+        return crabPositions.sumOf { (abs(it - medium) * (abs(it - medium) + 1)) / 2 }
     }
 }
 
