@@ -141,6 +141,6 @@ class Day02(commandLines: List<String>) {
 fun main() {
     val input = Day02::class.java.getResource(Day02.input)!!.readText().trim().split("\n", "\r\n")
     val day02 = Day02(input)
-    println("Day02::part1 = ${day02.part1()}")
-    println("Day02::part2 = ${day02.part2()}")
+    println("Day02::part1 -> ${day02.part1()}")
+    println("Day02::part2 -> ${day02.part2()}")
 }

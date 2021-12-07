@@ -181,6 +181,6 @@ class Day03(private val diagnosticReport: List<String>) {
 fun main() {
     val diagnosticReport = Day03::class.java.getResource(Day03.input)!!.readText().trim().split("\n", "\r\n")
     val day03 = Day03(diagnosticReport)
-    println("Day03::part1 = ${day03.part1()}")
-    println("Day03::part2 = ${day03.part2()}")
+    println("Day03::part1 -> ${day03.part1()}")
+    println("Day03::part2 -> ${day03.part2()}")
 }

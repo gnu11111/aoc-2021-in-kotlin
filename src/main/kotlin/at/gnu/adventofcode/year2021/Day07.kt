@@ -109,6 +109,6 @@ class Day07(input: List<Int>) {
 fun main() {
     val input = Day07::class.java.getResource(Day07.input)!!.readText().trim().split(",").map { it.toInt() }
     val day07 = Day07(input)
-    println("Day07::part1 = ${day07.part1()}")
-    println("Day07::part2 = ${day07.part2()}")
+    println("Day07::part1 -> ${day07.part1()}")
+    println("Day07::part2 -> ${day07.part2()}")
 }
