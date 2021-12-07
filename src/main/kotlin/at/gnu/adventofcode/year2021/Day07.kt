@@ -21,8 +21,8 @@ class Day07(input: List<Int>) {
         return min(sumOfFuelCosts(medium), sumOfFuelCosts(medium + 1))
     }
 
-    private fun sumOfFuelCosts(medium: Int) =
-        crabPositions.sumOf { (abs(it - medium) * (abs(it - medium) + 1)) / 2 }
+    private fun sumOfFuelCosts(position: Int) =
+        crabPositions.sumOf { (abs(it - position) * (abs(it - position) + 1)) / 2 }
 }
 
 fun main() {
