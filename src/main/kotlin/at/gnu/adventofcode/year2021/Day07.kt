@@ -86,6 +86,7 @@
 package at.gnu.adventofcode.year2021
 
 import kotlin.math.abs
+import kotlin.math.min
 
 class Day07(input: List<Int>) {
 
@@ -101,9 +102,12 @@ class Day07(input: List<Int>) {
     }
 
     fun part2(): Int {
-        val medium = (crabPositions.sum() + 1) / crabPositions.size
-        return crabPositions.sumOf { (abs(it - medium) * (abs(it - medium) + 1)) / 2 }
+        val medium = crabPositions.sum() / crabPositions.size
+        return min(sumOfFuelCosts(medium), sumOfFuelCosts(medium + 1))
     }
+
+    private fun sumOfFuelCosts(medium: Int) =
+        crabPositions.sumOf { (abs(it - medium) * (abs(it - medium) + 1)) / 2 }
 }
 
 fun main() {
