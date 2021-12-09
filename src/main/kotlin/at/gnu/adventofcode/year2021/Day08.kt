@@ -29,7 +29,7 @@ class Day08(input: List<String>) {
             map[4] = display.getPatternsOfSize(4).first()
             map[7] = display.getPatternsOfSize(3).first()
             map[8] = display.getPatternsOfSize(7).first()
-            map[9] = zeroSixNine.first { it.containsAll(map[1]!! + map[4]!!) }
+            map[9] = zeroSixNine.first { it.containsAll(map[4]!!) }
 
             val zeroSix = zeroSixNine.filter { it != map[9]!! }
             val e = map[8]!! - map[9]!!
