@@ -21,22 +21,17 @@ class Day09(val input: List<String>) {
     private fun Point.fill(points: Set<Point>): Set<Point> =
         when {
             (this.value >= threshold) || (this in points) -> points
-            else -> {
-                var newPoints = points + this
-                newPoints = getPointAt(x + 1, y).fill(newPoints)
-                newPoints = getPointAt(x - 1, y).fill(newPoints)
-                newPoints = getPointAt(x, y + 1).fill(newPoints)
-                newPoints = getPointAt(x, y - 1).fill(newPoints)
-                newPoints
-            }
+            else -> this.adjacentPoints().fold(points + this) { acc, point -> point.fill(acc) }
         }
 
     private fun List<List<Point>>.getLowPoints(): List<Point> =
         this.flatten().filter { it.isLowPoint() }
 
     private fun Point.isLowPoint(): Boolean =
-        (value < getPointAt(x - 1, y).value) && (value < getPointAt(x + 1, y).value) &&
-        (value < getPointAt(x, y - 1).value) && (value < getPointAt(x, y + 1).value)
+        this.adjacentPoints().all { value < it.value }
+
+    private fun Point.adjacentPoints(): List<Point> =
+        listOf(getPointAt(x - 1, y), getPointAt(x + 1, y), getPointAt(x, y - 1), getPointAt(x, y + 1))
 
     private fun getPointAt(x: Int, y: Int): Point =
         heightmap.elementAtOrNull(y)?.elementAtOrNull(x) ?: outOfBounds
