@@ -5,7 +5,7 @@ class Day09(val input: List<String>) {
     companion object {
         const val input = "/adventofcode/year2021/Day09.txt"
         const val threshold = 9
-        val outOfBounds = Point(0, 0, 10)
+        val outOfBounds = Point(0, 0, threshold + 1)
     }
 
     data class Point(val x: Int, val y: Int, val value: Int)
