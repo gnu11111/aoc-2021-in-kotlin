@@ -13,10 +13,10 @@ class Day09(val input: List<String>) {
     private val heightmap = input.mapIndexed { y, line -> line.mapIndexed { x, char -> Point(x, y, char - '0') } }
 
     fun part1(): Int =
-        heightmap.getLowPoints().sumOf { it.value + 1 }
+        heightmap.lowPoints().sumOf { it.value + 1 }
 
     fun part2(): Int =
-        heightmap.getLowPoints().map { it.fill(emptySet()).size }.sortedDescending().take(3).reduce(Int::times)
+        heightmap.lowPoints().map { it.fill(emptySet()).size }.sortedDescending().take(3).reduce(Int::times)
 
     private fun Point.fill(points: Set<Point>): Set<Point> =
         when {
@@ -24,16 +24,16 @@ class Day09(val input: List<String>) {
             else -> this.adjacentPoints().fold(points + this) { acc, point -> point.fill(acc) }
         }
 
-    private fun List<List<Point>>.getLowPoints(): List<Point> =
+    private fun List<List<Point>>.lowPoints(): List<Point> =
         this.flatten().filter { it.isLowPoint() }
 
     private fun Point.isLowPoint(): Boolean =
         this.adjacentPoints().all { this.value < it.value }
 
     private fun Point.adjacentPoints(): List<Point> =
-        listOf(getPointAt(x - 1, y), getPointAt(x + 1, y), getPointAt(x, y - 1), getPointAt(x, y + 1))
+        listOf(pointAt(x - 1, y), pointAt(x + 1, y), pointAt(x, y - 1), pointAt(x, y + 1))
 
-    private fun getPointAt(x: Int, y: Int): Point =
+    private fun pointAt(x: Int, y: Int): Point =
         heightmap.elementAtOrNull(y)?.elementAtOrNull(x) ?: outOfBounds
 }
 
