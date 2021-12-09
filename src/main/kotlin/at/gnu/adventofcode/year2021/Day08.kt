@@ -9,9 +9,9 @@ class Day08(input: List<String>) {
     data class Display(val signalPatterns: List<Set<Char>>, val outputValues: List<Set<Char>>)
 
     private val displays: List<Display> = input.fold(listOf()) { acc, line ->
-        val (signalPatternsStrings, outputValuesString) = line.split(" | ").map { it.split(" ") }
+        val (signalPatternsStrings, outputValuesStrings) = line.split(" | ").map { it.split(" ") }
         val signalPatterns = signalPatternsStrings.map { it.asSequence().sorted().toSet() }
-        val outputValues = outputValuesString.map { it.asSequence().sorted().toSet() }
+        val outputValues = outputValuesStrings.map { it.asSequence().sorted().toSet() }
         acc + Display(signalPatterns, outputValues)
     }
 
