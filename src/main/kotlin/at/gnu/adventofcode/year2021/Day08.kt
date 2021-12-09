@@ -22,13 +22,13 @@ class Day08(input: List<String>) {
         var sum = 0
         for (display in displays) {
             val map = mutableMapOf<Int, Set<Char>>()
-            val twoThreeFive = display.getPatternOfSize(5)
-            val zeroSixNine = display.getPatternOfSize(6)
+            val twoThreeFive = display.getPatternsOfSize(5)
+            val zeroSixNine = display.getPatternsOfSize(6)
 
-            map[1] = display.getPatternOfSize(2).first()
-            map[4] = display.getPatternOfSize(4).first()
-            map[7] = display.getPatternOfSize(3).first()
-            map[8] = display.getPatternOfSize(7).first()
+            map[1] = display.getPatternsOfSize(2).first()
+            map[4] = display.getPatternsOfSize(4).first()
+            map[7] = display.getPatternsOfSize(3).first()
+            map[8] = display.getPatternsOfSize(7).first()
             map[9] = zeroSixNine.first { it.containsAll(map[1]!! + map[4]!!) }
 
             val zeroSix = zeroSixNine.filter { it != map[9]!! }
@@ -49,7 +49,7 @@ class Day08(input: List<String>) {
         return sum
     }
 
-    private fun Display.getPatternOfSize(size: Int): List<Set<Char>> =
+    private fun Display.getPatternsOfSize(size: Int): List<Set<Char>> =
         this.signalPatterns.filter { it.size == size }
 
     private fun Display.countAmountOfNumbersOneFourSevenEight(): Int =
