@@ -28,7 +28,7 @@ class Day09(val input: List<String>) {
         this.flatten().filter { it.isLowPoint() }
 
     private fun Point.isLowPoint(): Boolean =
-        this.adjacentPoints().all { value < it.value }
+        this.adjacentPoints().all { this.value < it.value }
 
     private fun Point.adjacentPoints(): List<Point> =
         listOf(getPointAt(x - 1, y), getPointAt(x + 1, y), getPointAt(x, y - 1), getPointAt(x, y + 1))
