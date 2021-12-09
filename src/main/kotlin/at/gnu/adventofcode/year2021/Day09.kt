@@ -16,12 +16,12 @@ class Day09(val input: List<String>) {
         heightmap.lowPoints().sumOf { it.value + 1 }
 
     fun part2(): Int =
-        heightmap.lowPoints().map { it.fill(emptySet()).size }.sortedDescending().take(3).reduce(Int::times)
+        heightmap.lowPoints().map { it.fillBasin(emptySet()).size }.sortedDescending().take(3).reduce(Int::times)
 
-    private fun Point.fill(points: Set<Point>): Set<Point> =
+    private fun Point.fillBasin(points: Set<Point>): Set<Point> =
         when {
             (this.value >= threshold) || (this in points) -> points
-            else -> this.adjacentPoints().fold(points + this) { acc, point -> point.fill(acc) }
+            else -> this.adjacentPoints().fold(points + this) { acc, point -> point.fillBasin(acc) }
         }
 
     private fun List<List<Point>>.lowPoints(): List<Point> =
