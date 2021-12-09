@@ -13,10 +13,10 @@ class Day09(val input: List<String>) {
     private val heightmap = input.mapIndexed { y, line -> line.mapIndexed { x, char -> Point(x, y, char - '0') } }
 
     fun part1(): Int =
-        heightmap.getLowPoints().sumOf { it.value + 1}
+        heightmap.getLowPoints().sumOf { it.value + 1 }
 
     fun part2(): Int =
-        heightmap.getLowPoints().map { it.fill(emptySet()).size }.sortedDescending().take(3).fold(1) { a, s -> a * s }
+        heightmap.getLowPoints().map { it.fill(emptySet()).size }.sortedDescending().take(3).reduce(Int::times)
 
     private fun Point.fill(points: Set<Point>): Set<Point> =
         when {
