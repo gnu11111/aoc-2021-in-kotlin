@@ -22,24 +22,24 @@ class Day08(input: List<String>) {
         var sum = 0
         for (display in displays) {
             val map = mutableMapOf<Int, Set<Char>>()
-            val sizeFive = display.getPatternOfSize(5)
-            val sizeSix = display.getPatternOfSize(6)
+            val twoThreeFive = display.getPatternOfSize(5)
+            val zeroSixNine = display.getPatternOfSize(6)
 
             map[1] = display.getPatternOfSize(2).first()
             map[4] = display.getPatternOfSize(4).first()
             map[7] = display.getPatternOfSize(3).first()
             map[8] = display.getPatternOfSize(7).first()
-            map[9] = sizeSix.first { it.containsAll(map[1]!! union map[4]!!) }
+            map[9] = zeroSixNine.first { it.containsAll(map[1]!! + map[4]!!) }
 
-            val zeroSix = sizeSix.filter { !it.containsAll(map[9]!!) }
+            val zeroSix = zeroSixNine.filter { it != map[9]!! }
             val e = map[8]!! - map[9]!!
-            val possibleSix = sizeFive.map { it + e }
+            val possibleSix = twoThreeFive.map { it + e }
 
             map[6] = possibleSix.first { (it == zeroSix[0]) || (it == zeroSix[1]) }
             map[5] = map[6]!! - e
             map[0] = zeroSix.first { it != map[6] }
-            map[2] = sizeFive.first { it.containsAll(e) }
-            map[3] = sizeFive.first { (it != map[2]) && (it != map[5]) }
+            map[2] = twoThreeFive.first { it.containsAll(e) }
+            map[3] = twoThreeFive.first { (it != map[2]) && (it != map[5]) }
 
             var number = 0
             for (value in display.outputValues)
