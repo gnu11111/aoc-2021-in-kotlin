@@ -16,7 +16,7 @@ class Day08(input: List<String>) {
     }
 
     fun part1(): Int =
-        displays.fold(0) { acc, display -> acc + display.countAmountOfNumbersOneFourSevenEight() }
+        displays.fold(0) { acc, display -> acc + display.outputValues.count { it.size in setOf(2, 3, 4, 7) } }
 
     fun part2(): Int {
         var sum = 0
@@ -51,9 +51,6 @@ class Day08(input: List<String>) {
 
     private fun Display.getPatternsOfSize(size: Int): List<Set<Char>> =
         this.signalPatterns.filter { it.size == size }
-
-    private fun Display.countAmountOfNumbersOneFourSevenEight(): Int =
-        this.outputValues.map { it.size }.count { (it == 2) || (it == 3) || (it == 4) || (it == 7) }
 }
 
 fun main() {
