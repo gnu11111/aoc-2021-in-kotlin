@@ -23,10 +23,10 @@ class Day09(val input: List<String>) {
             (this.value >= threshold) || (this in points) -> points
             else -> {
                 var newPoints = points + this
-                newPoints = getPoint(x + 1, y).fill(newPoints)
-                newPoints = getPoint(x - 1, y).fill(newPoints)
-                newPoints = getPoint(x, y + 1).fill(newPoints)
-                newPoints = getPoint(x, y - 1).fill(newPoints)
+                newPoints = getPointAt(x + 1, y).fill(newPoints)
+                newPoints = getPointAt(x - 1, y).fill(newPoints)
+                newPoints = getPointAt(x, y + 1).fill(newPoints)
+                newPoints = getPointAt(x, y - 1).fill(newPoints)
                 newPoints
             }
         }
@@ -35,10 +35,10 @@ class Day09(val input: List<String>) {
         this.flatten().filter { it.isLowPoint() }
 
     private fun Point.isLowPoint(): Boolean =
-        (value < getPoint(x - 1, y).value) && (value < getPoint(x + 1, y).value) &&
-        (value < getPoint(x, y - 1).value) && (value < getPoint(x, y + 1).value)
+        (value < getPointAt(x - 1, y).value) && (value < getPointAt(x + 1, y).value) &&
+        (value < getPointAt(x, y - 1).value) && (value < getPointAt(x, y + 1).value)
 
-    private fun getPoint(x: Int, y: Int): Point =
+    private fun getPointAt(x: Int, y: Int): Point =
         heightmap.elementAtOrNull(y)?.elementAtOrNull(x) ?: outOfBounds
 }
 
