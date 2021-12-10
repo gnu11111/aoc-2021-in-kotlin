@@ -31,7 +31,7 @@ class Day10(private val navigationSubsystem: List<String>) {
     private fun String.compress(): String {
         var line = this
         var lastLength = -1
-        while ((line.isNotEmpty()) && (line.length != lastLength)) {
+        while (line.isNotEmpty() && (line.length != lastLength)) {
             lastLength = line.length
             line = line.replace("()", "").replace("[]", "").replace("{}", "").replace("<>", "")
         }
