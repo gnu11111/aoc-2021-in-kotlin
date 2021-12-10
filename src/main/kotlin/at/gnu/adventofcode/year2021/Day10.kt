@@ -9,16 +9,21 @@ class Day10(private val navigationSubsystem: List<String>) {
     }
 
     fun part1(): Long =
-        navigationSubsystem.fold(0) { acc, chunk -> acc + (scoresPart1[chunk.firstIllegalClosingBracket()] ?: 0) }
+        navigationSubsystem.fold(0L) { acc, chunk -> acc + (scoresPart1[chunk.firstIllegalClosingBracket()] ?: 0) }
 
     fun part2(): Long {
         val score = mutableListOf<Long>()
-        navigationSubsystem.asSequence()
-            .map { it.compress() }
-            .filter { it.firstOrNull { char -> char in scoresPart1.keys } == null }
-            .forEach { score += it.foldRight(0L) { c, acc -> (5L * acc) + scoresPart2[c]!! } }
+        navigationSubsystem.asSequence().map { it.compress() }.filter { it.isIncomplete() }.forEach {
+            score += it.calculateScore()
+        }
         return score.sorted()[score.size / 2]
     }
+
+    private fun String.isIncomplete() =
+        this.firstOrNull { it in scoresPart1.keys } == null
+
+    private fun String.calculateScore(): Long =
+        this.foldRight(0L) { bracket, acc -> (5L * acc) + scoresPart2[bracket]!! }
 
     private fun String.firstIllegalClosingBracket() =
         this.compress().firstOrNull { it in scoresPart1.keys }
