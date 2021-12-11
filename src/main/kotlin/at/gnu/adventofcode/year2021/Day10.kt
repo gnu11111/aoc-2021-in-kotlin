@@ -42,6 +42,6 @@ class Day10(private val navigationSubsystem: List<String>) {
 fun main() {
     val navigationSubsystem = Day10::class.java.getResource(Day10.input)!!.readText().trim().split("\n", "\r\n")
     val day10 = Day10(navigationSubsystem)
-    println("Day10::part1 = ${day10.part1()}")
-    println("Day10::part2 = ${day10.part2()}")
+    println("Day10::part1 -> ${day10.part1()}")
+    println("Day10::part2 -> ${day10.part2()}")
 }
