@@ -17,7 +17,7 @@ class Day11(val input: List<String>) {
     fun part1(): Int {
         octopusses.init()
         return (1..100).fold(0) { flashes, _ ->
-            octopusses.forEach { it.increaseEnergy(emptySet()) }
+            octopusses.forEach { it.increaseEnergy() }
             flashes + octopusses.resetEnergyAndCountFlashes()
         }
     }
@@ -25,7 +25,7 @@ class Day11(val input: List<String>) {
     fun part2(): Int {
         octopusses.init()
         return generateSequence(1) { count ->
-            octopusses.forEach { it.increaseEnergy(emptySet()) }
+            octopusses.forEach { it.increaseEnergy() }
             if (octopusses.resetEnergyAndCountFlashes() == octopusses.size) null else (count + 1)
         }.last()
     }
@@ -36,7 +36,7 @@ class Day11(val input: List<String>) {
     private fun List<Octopus>.resetEnergyAndCountFlashes() =
         this.filter { it.energyLevel > energyThreshold }.map { it.energyLevel = 0 }.count()
 
-    private fun Octopus.increaseEnergy(octopusses: Set<Octopus>): Set<Octopus> =
+    private fun Octopus.increaseEnergy(octopusses: Set<Octopus> = emptySet()): Set<Octopus> =
         when {
             (this === outOfBounds) || (this in octopusses) -> octopusses
             (this.energyLevel == energyThreshold) -> this.increaseEnergyAndAffectNeighbors(octopusses)
