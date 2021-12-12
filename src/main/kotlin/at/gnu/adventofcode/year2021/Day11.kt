@@ -9,47 +9,56 @@ class Day11(val input: List<String>) {
 
     data class Octopus(val x: Int, val y: Int, var energyLevel: Int = 0)
 
-    private var octopusses = input.mapIndexed { y, line -> line.mapIndexed { x, char -> Octopus(x, y, char - '0') } }
+    private val maxX = input.first().length
+    private val maxY = input.size
+    private var octopusses: List<Octopus> = emptyList()
 
     fun part1(): Int {
+        octopusses = createOctopusses()
         var flashes = 0
         repeat(100) {
-            octopusses.flatten().forEach { it.increaseEnergy(emptySet()) }
-            octopusses.flatten().forEach { if (it.energyLevel > 9) { flashes++; it.energyLevel = 0 } }
+            octopusses.forEach { it.increaseEnergy(emptySet()) }
+            octopusses.forEach { if (it.energyLevel > 9) { flashes++; it.energyLevel = 0 } }
         }
         return flashes
     }
 
     fun part2(): Int {
+        octopusses = createOctopusses()
         var count = 0
-        // TODO: octopus.energyLevels should not be mutable!
-        octopusses = input.mapIndexed { y, line -> line.mapIndexed { x, char -> Octopus(x, y, char - '0') } }
         while (true) {
             count++
-            var flashes = 0
-            octopusses.flatten().forEach { it.increaseEnergy(emptySet()) }
-            octopusses.flatten().forEach { if (it.energyLevel > 9) { flashes++; it.energyLevel = 0 } }
-            if (flashes == octopusses.flatten().size)
+            octopusses.forEach { it.increaseEnergy(emptySet()) }
+            val flashes = octopusses.filter { it.energyLevel > 9 }.map { it.energyLevel = 0 }.count()
+            if (flashes == octopusses.size)
                 return count
         }
     }
 
+    private fun createOctopusses() =
+        input.mapIndexed { y, line -> line.mapIndexed { x, char -> Octopus(x, y, char - '0') } }.flatten()
+
     private fun Octopus.increaseEnergy(octopusses: Set<Octopus>): Set<Octopus> =
         when {
             (this === outOfBounds) || (this in octopusses) -> octopusses
-            (this.energyLevel == 9) -> {
-                this.energyLevel++
-                this.neighbors().fold(octopusses + this) { acc, octopus -> octopus.increaseEnergy(acc) }
-            }
+            (this.energyLevel == 9) -> this.affectNeighbors(octopusses)
             else -> { this.energyLevel++; octopusses }
         }
+
+    private fun Octopus.affectNeighbors(octopusses: Set<Octopus>): Set<Octopus> {
+        this.energyLevel++
+        return this.neighbors().fold(octopusses + this) { acc, octopus -> octopus.increaseEnergy(acc) }
+    }
 
     private fun Octopus.neighbors(): List<Octopus> =
         listOf(octopusAt(x - 1, y), octopusAt(x + 1, y), octopusAt(x, y - 1), octopusAt(x, y + 1),
             octopusAt(x - 1, y + 1), octopusAt(x + 1, y + 1), octopusAt(x - 1, y - 1), octopusAt(x + 1, y - 1))
 
     private fun octopusAt(x: Int, y: Int): Octopus =
-        octopusses.elementAtOrNull(y)?.elementAtOrNull(x) ?: outOfBounds
+        if ((x >= 0) && (x < maxX) && (y >= 0) && (y < maxY))
+            octopusses.elementAt((y * maxX) + x)
+        else
+            outOfBounds
 }
 
 fun main() {
