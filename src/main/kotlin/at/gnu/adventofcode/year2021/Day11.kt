@@ -14,33 +14,35 @@ class Day11(val input: List<String>) {
     private val maxY = input.size
 
     fun part1(): Int {
-        initOctopusses()
+        octopusses.init()
         return (1..100).fold(0) { flashes, _ ->
             octopusses.forEach { it.increaseEnergy(emptySet()) }
-            flashes + octopusses.filter { it.energyLevel > 9 }.map { it.energyLevel = 0 }.count()
+            flashes + octopusses.countFlashes()
         }
     }
 
     fun part2(): Int {
-        initOctopusses()
+        octopusses.init()
         return generateSequence(1) { count ->
             octopusses.forEach { it.increaseEnergy(emptySet()) }
-            val flashes = octopusses.filter { it.energyLevel > 9 }.map { it.energyLevel = 0 }.count()
-            if (flashes == octopusses.size) null else (count + 1)
+            if (octopusses.countFlashes() == octopusses.size) null else (count + 1)
         }.last()
     }
 
-    private fun initOctopusses() =
-        octopusses.map { it.energyLevel = it.initialLevel }
+    private fun List<Octopus>.init() =
+        this.map { it.energyLevel = it.initialLevel }
+
+    private fun List<Octopus>.countFlashes() =
+        this.filter { it.energyLevel > 9 }.map { it.energyLevel = 0 }.count()
 
     private fun Octopus.increaseEnergy(octopusses: Set<Octopus>): Set<Octopus> =
         when {
             (this === outOfBounds) || (this in octopusses) -> octopusses
-            (this.energyLevel == 9) -> this.affectNeighbors(octopusses)
+            (this.energyLevel == 9) -> this.increaseEnergyAndAffectNeighbors(octopusses)
             else -> { this.energyLevel++; octopusses }
         }
 
-    private fun Octopus.affectNeighbors(octopusses: Set<Octopus>): Set<Octopus> {
+    private fun Octopus.increaseEnergyAndAffectNeighbors(octopusses: Set<Octopus>): Set<Octopus> {
         this.energyLevel++
         return this.neighbors().fold(octopusses + this) { acc, octopus -> octopus.increaseEnergy(acc) }
     }
