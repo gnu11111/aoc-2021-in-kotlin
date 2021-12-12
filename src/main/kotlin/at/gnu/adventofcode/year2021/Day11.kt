@@ -53,7 +53,7 @@ class Day11(val input: List<String>) {
             octopusAt(x - 1, y + 1), octopusAt(x + 1, y + 1), octopusAt(x - 1, y - 1), octopusAt(x + 1, y - 1))
 
     private fun octopusAt(x: Int, y: Int): Octopus =
-        if ((x >= 0) && (x < maxX) && (y >= 0) && (y < maxY))
+        if ((x in 0 until maxX) && (y in 0 until maxY))
             octopusses.elementAt((y * maxX) + x)
         else
             outOfBounds
