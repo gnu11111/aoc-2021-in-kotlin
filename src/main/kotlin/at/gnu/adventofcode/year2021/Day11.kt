@@ -7,36 +7,31 @@ class Day11(val input: List<String>) {
         val outOfBounds = Octopus(-1, -1, 0)
     }
 
-    data class Octopus(val x: Int, val y: Int, var energyLevel: Int = 0)
+    data class Octopus(val x: Int, val y: Int, val initialLevel: Int, var energyLevel: Int = 0)
 
+    private val octopusses = input.mapIndexed { y, l -> l.mapIndexed { x, c -> Octopus(x, y, c - '0') } }.flatten()
     private val maxX = input.first().length
     private val maxY = input.size
-    private var octopusses: List<Octopus> = emptyList()
 
     fun part1(): Int {
-        octopusses = createOctopusses()
-        var flashes = 0
-        repeat(100) {
+        initOctopusses()
+        return (1..100).fold(0) { flashes, _ ->
             octopusses.forEach { it.increaseEnergy(emptySet()) }
-            octopusses.forEach { if (it.energyLevel > 9) { flashes++; it.energyLevel = 0 } }
+            flashes + octopusses.filter { it.energyLevel > 9 }.map { it.energyLevel = 0 }.count()
         }
-        return flashes
     }
 
     fun part2(): Int {
-        octopusses = createOctopusses()
-        var count = 0
-        while (true) {
-            count++
+        initOctopusses()
+        return generateSequence(1) { count ->
             octopusses.forEach { it.increaseEnergy(emptySet()) }
             val flashes = octopusses.filter { it.energyLevel > 9 }.map { it.energyLevel = 0 }.count()
-            if (flashes == octopusses.size)
-                return count
-        }
+            if (flashes == octopusses.size) null else (count + 1)
+        }.last()
     }
 
-    private fun createOctopusses() =
-        input.mapIndexed { y, line -> line.mapIndexed { x, char -> Octopus(x, y, char - '0') } }.flatten()
+    private fun initOctopusses() =
+        octopusses.map { it.energyLevel = it.initialLevel }
 
     private fun Octopus.increaseEnergy(octopusses: Set<Octopus>): Set<Octopus> =
         when {
