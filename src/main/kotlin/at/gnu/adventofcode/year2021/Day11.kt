@@ -4,6 +4,7 @@ class Day11(val input: List<String>) {
 
     companion object {
         const val input = "/adventofcode/year2021/Day11.txt"
+        const val energyThreshold = 9
         val outOfBounds = Octopus(-1, -1, 0)
     }
 
@@ -33,12 +34,12 @@ class Day11(val input: List<String>) {
         this.map { it.energyLevel = it.initialLevel }
 
     private fun List<Octopus>.resetEnergyAndCountFlashes() =
-        this.filter { it.energyLevel > 9 }.map { it.energyLevel = 0 }.count()
+        this.filter { it.energyLevel > energyThreshold }.map { it.energyLevel = 0 }.count()
 
     private fun Octopus.increaseEnergy(octopusses: Set<Octopus>): Set<Octopus> =
         when {
             (this === outOfBounds) || (this in octopusses) -> octopusses
-            (this.energyLevel == 9) -> this.increaseEnergyAndAffectNeighbors(octopusses)
+            (this.energyLevel == energyThreshold) -> this.increaseEnergyAndAffectNeighbors(octopusses)
             else -> { this.energyLevel++; octopusses }
         }
 
