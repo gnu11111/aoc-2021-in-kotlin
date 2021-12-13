@@ -10,7 +10,7 @@ class Day13(dotsFromInput: List<String>, foldsFromInput: List<String>) {
     }
 
     data class Dot(val x: Int, val y: Int)
-    sealed class Fold(val transformation: (Dot) -> Dot)
+    sealed class Fold(val transform: (Dot) -> Dot)
 
     private val dots = dotsFromInput.map { it.split(",") }.map { Dot(it[0].toInt(), it[1].toInt()) }.toSet()
     private val folds = foldsFromInput.map {
@@ -25,7 +25,7 @@ class Day13(dotsFromInput: List<String>, foldsFromInput: List<String>) {
         folds.fold(dots) { acc, fold -> acc.process(fold) }.prettyPrint()
 
     private fun Set<Dot>.process(fold: Fold): Set<Dot> =
-        this.map { fold.transformation(it) }.toSet()
+        this.map { fold.transform(it) }.toSet()
 
     private fun Set<Dot>.prettyPrint(): Int =
         (0..this.maxOf { it.y }).forEach { y ->
