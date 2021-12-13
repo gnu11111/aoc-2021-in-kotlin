@@ -5,7 +5,7 @@ class Day13(dotsFromInput: List<String>, foldsFromInput: List<String>) {
     companion object {
         const val input = "/adventofcode/year2021/Day13.txt"
         const val foldCommandVerticalType = "x"
-        private val foldCommand = """fold along (.)=(\d+)""".toRegex()
+        private val foldCommand = """fold along ([xy])=(\d+)""".toRegex()
         private val outOfBounds = Dot(-1, -1)
     }
 
