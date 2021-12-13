@@ -20,7 +20,7 @@ class Day13(dotsFromInput: List<String>, foldsFromInput: List<String>) {
     }
 
     fun part1(): Int =
-        when (val fold = folds[0]) {
+        when (val fold = folds.first()) {
             is Horizontal -> dots.fold(fold.y, FoldMethod.HORIZONTAL)
             is Vertical -> dots.fold(fold.x, FoldMethod.VERTICAL)
         }.size
@@ -53,15 +53,11 @@ class Day13(dotsFromInput: List<String>, foldsFromInput: List<String>) {
     private fun Dot.foldVertical(border: Int): Dot =
         if (this.x < border) this else if (this.x > border) Dot((2 * border) - this.x, this.y) else outOfBounds
 
-    private fun Set<Dot>.prettyPrint() {
-        val maxX = this.maxOf { it.x }
-        val maxY = this.maxOf { it.y }
-        for (y in 0..maxY) {
-            for (x in 0..maxX)
-                print(if (this.contains(Dot(x, y))) "#" else ".")
+    private fun Set<Dot>.prettyPrint() =
+        (0..this.maxOf { it.y }).forEach { y ->
+            (0..this.maxOf { it.x }).forEach { x -> print(if (this.contains(Dot(x, y))) "#" else ".") }
             println("")
         }
-    }
 }
 
 fun main() {
