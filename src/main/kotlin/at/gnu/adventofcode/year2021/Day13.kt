@@ -4,6 +4,8 @@ class Day13(dotsFromInput: List<String>, foldsFromInput: List<String>) {
 
     companion object {
         const val input = "/adventofcode/year2021/Day13.txt"
+        const val foldCommandVerticalType = "x"
+        private val foldCommand = """fold along (.)=(\d+)""".toRegex()
         private val outOfBounds = Dot(-1, -1)
     }
 
@@ -12,8 +14,8 @@ class Day13(dotsFromInput: List<String>, foldsFromInput: List<String>) {
 
     private val dots = dotsFromInput.map { it.split(",") }.map { Dot(it[0].toInt(), it[1].toInt()) }.toSet()
     private val folds = foldsFromInput.map {
-        val (type, amount) = """fold along (.)=(\d+)""".toRegex().matchEntire(it)!!.destructured
-        if (type == "x") FoldVertical(amount.toInt()) else FoldHorizontal(amount.toInt())
+        val (type, amount) = foldCommand.matchEntire(it)!!.destructured
+        if (type == foldCommandVerticalType) FoldVertical(amount.toInt()) else FoldHorizontal(amount.toInt())
     }
 
     fun part1(): Int =
