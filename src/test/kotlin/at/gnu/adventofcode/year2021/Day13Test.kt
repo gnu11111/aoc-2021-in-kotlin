@@ -33,7 +33,7 @@ class Day13Test {
 
     private val test = mapOf(
         Day13::part1 to 17,
-        Day13::part2 to 239465106
+        Day13::part2 to 16
     )
 
     @Test

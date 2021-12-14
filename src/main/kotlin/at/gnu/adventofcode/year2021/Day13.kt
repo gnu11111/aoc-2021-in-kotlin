@@ -19,19 +19,13 @@ class Day13(dotsFromInput: List<String>, foldsFromInput: List<String>) {
     }
 
     fun part1(): Int =
-        dots.process(folds.first()).size
+        dots.creasePaper(folds.first()).size
 
     fun part2(): Int =
-        folds.fold(dots) { acc, fold -> acc.process(fold) }.prettyPrint()
+        folds.fold(dots) { acc, fold -> acc.creasePaper(fold) }.also { prettyPrint(it) }.size
 
-    private fun Set<Dot>.process(fold: Fold): Set<Dot> =
+    private fun Set<Dot>.creasePaper(fold: Fold): Set<Dot> =
         this.map { fold.transform(it) }.toSet()
-
-    private fun Set<Dot>.prettyPrint(): Int =
-        (0..this.maxOf { it.y }).forEach { y ->
-            (0..this.maxOf { it.x }).forEach { x -> print(if (this.contains(Dot(x, y))) "#" else ".") }
-            println("")
-        }.hashCode()
 
     class FoldHorizontal(y: Int) : Fold({ dot ->
         if (dot.y < y) dot else if (dot.y > y) Dot(dot.x, (2 * y) - dot.y) else outOfBounds
@@ -40,6 +34,12 @@ class Day13(dotsFromInput: List<String>, foldsFromInput: List<String>) {
     class FoldVertical(x: Int) : Fold({ dot ->
         if (dot.x < x) dot else if (dot.x > x) Dot((2 * x) - dot.x, dot.y) else outOfBounds
     })
+
+    private fun prettyPrint(dots: Set<Dot>) =
+        (0..dots.maxOf { it.y }).forEach { y ->
+            (0..dots.maxOf { it.x }).forEach { x -> print(if (dots.contains(Dot(x, y))) "#" else ".") }
+            println("")
+        }
 }
 
 fun main() {
