@@ -43,9 +43,9 @@ class Day13(dotsFromInput: List<String>, foldersFromInput: List<String>) {
 }
 
 fun main() {
-    val (dots, folds) = Day13::class.java.getResource(Day13.input)!!.readText().trim()
+    val (dots, folders) = Day13::class.java.getResource(Day13.input)!!.readText().trim()
         .split("\n\n", "\r\n\r\n").map { it.split("\n", "\r\n") }
-    val day13 = Day13(dots, folds)
+    val day13 = Day13(dots, folders)
     println("Day13::part1 -> ${day13.part1()}")
     println("Day13::part2 -> ${day13.part2()}")
 }
