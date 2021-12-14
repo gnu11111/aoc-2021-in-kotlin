@@ -1,37 +1,37 @@
 package at.gnu.adventofcode.year2021
 
-class Day13(dotsFromInput: List<String>, foldsFromInput: List<String>) {
+class Day13(dotsFromInput: List<String>, foldersFromInput: List<String>) {
 
     companion object {
         const val input = "/adventofcode/year2021/Day13.txt"
-        const val foldCommandVerticalType = "x"
-        private val foldCommand = """fold along ([xy])=(\d+)""".toRegex()
+        const val verticalFolderType = "x"
+        private val folderCommand = """fold along ([xy])=(\d+)""".toRegex()
         private val outOfBounds = Dot(-1, -1)
     }
 
     data class Dot(val x: Int, val y: Int)
-    sealed class Fold(val transform: (Dot) -> Dot)
+    sealed class Folder(val transform: (Dot) -> Dot)
 
     private val dots = dotsFromInput.map { it.split(",") }.map { Dot(it[0].toInt(), it[1].toInt()) }.toSet()
-    private val folds = foldsFromInput.map {
-        val (type, amount) = foldCommand.matchEntire(it)!!.destructured
-        if (type == foldCommandVerticalType) FoldVertical(amount.toInt()) else FoldHorizontal(amount.toInt())
+    private val folders = foldersFromInput.map {
+        val (type, amount) = folderCommand.matchEntire(it)!!.destructured
+        if (type == verticalFolderType) VerticalFolder(amount.toInt()) else HorizontalFolder(amount.toInt())
     }
 
     fun part1(): Int =
-        dots.creasePaper(folds.first()).size
+        dots.creasePaperUsing(folders.first()).size
 
     fun part2(): Int =
-        folds.fold(dots) { acc, fold -> acc.creasePaper(fold) }.also { prettyPrint(it) }.size
+        folders.fold(dots) { newDots, folder -> newDots.creasePaperUsing(folder) }.also { prettyPrint(it) }.size
 
-    private fun Set<Dot>.creasePaper(fold: Fold): Set<Dot> =
-        this.map { fold.transform(it) }.toSet()
+    private fun Set<Dot>.creasePaperUsing(folder: Folder): Set<Dot> =
+        this.map { dot -> folder.transform(dot) }.toSet()
 
-    class FoldHorizontal(y: Int) : Fold({ dot ->
+    class HorizontalFolder(y: Int) : Folder({ dot ->
         if (dot.y < y) dot else if (dot.y > y) Dot(dot.x, (2 * y) - dot.y) else outOfBounds
     })
 
-    class FoldVertical(x: Int) : Fold({ dot ->
+    class VerticalFolder(x: Int) : Folder({ dot ->
         if (dot.x < x) dot else if (dot.x > x) Dot((2 * x) - dot.x, dot.y) else outOfBounds
     })
 
