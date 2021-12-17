@@ -30,7 +30,6 @@ class Day13Test {
         fold along x=5
         """.trimIndent().split("\n\n").map { it.split("\n") }
 
-
     private val test = mapOf(
         Day13::part1 to 17,
         Day13::part2 to 16

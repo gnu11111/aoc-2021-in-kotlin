@@ -21,7 +21,7 @@ class Day14Test {
         for (function in test.keys) {
             val result: Long
             val time = measureNanoTime { result = function(day14) }
-            println("Day14::${function.name}: $polymerTemplate,${pairInsertionRules.size} rules -> $result [${time}ms]")
+            println("Day14::${function.name}: $polymerTemplate,${pairInsertionRules.size} rules -> $result [${time}ns]")
             Assert.assertEquals(test[function], result)
         }
     }
