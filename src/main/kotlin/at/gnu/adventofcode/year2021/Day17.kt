@@ -44,9 +44,10 @@ class Day17(targetAreaFromInput: String) {
             pX += dX
             pY += dY
             maxHeight = max(maxHeight, pY)
+            val outOfBounds = (abs(pX) > xRange.last || (pY < min(yRange.first, yRange.last)))
             if (targetArea contains Pair(pX, pY))
                 return maxHeight
-            else if ((pX >= targetArea.x2) || (pY < targetArea.y1))
+            else if (outOfBounds)
                 return -1
             dY--
             dX -= dX.sign
