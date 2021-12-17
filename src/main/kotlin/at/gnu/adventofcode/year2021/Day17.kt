@@ -26,12 +26,12 @@ class Day17(targetAreaFromInput: String) {
     }
 
     fun part1(): Int =
-        simulateShootings().maxOf { it }
+        simulateShootingsAndGetMaxHeightsOrMinusOne().maxOf { it }
 
     fun part2(): Int =
-        simulateShootings().filter { it >= 0 }.size
+        simulateShootingsAndGetMaxHeightsOrMinusOne().filter { it >= 0 }.size
 
-    private fun simulateShootings(): List<Int> =
+    private fun simulateShootingsAndGetMaxHeightsOrMinusOne(): List<Int> =
         xRange.fold(listOf()) { acc, x -> acc + yRange.fold(listOf()) { acc2, y -> acc2 + shoot(x, y) } }
 
     private fun shoot(initialX: Int, initialY: Int): Int {
@@ -44,7 +44,7 @@ class Day17(targetAreaFromInput: String) {
             pX += dX
             pY += dY
             maxHeight = max(maxHeight, pY)
-            if ((pX in targetArea.x1..targetArea.x2) && (pY in targetArea.y1..targetArea.y2))
+            if (targetArea contains Pair(pX, pY))
                 return maxHeight
             else if ((pX >= targetArea.x2) || (pY < targetArea.y1))
                 return -1
@@ -52,6 +52,9 @@ class Day17(targetAreaFromInput: String) {
             dX -= dX.sign
         }
     }
+
+    infix fun Area.contains(coordinate: Pair<Int, Int>): Boolean =
+        coordinate.first in this.x1..this.x2 && coordinate.second in this.y1..this.y2
 }
 
 fun main() {
