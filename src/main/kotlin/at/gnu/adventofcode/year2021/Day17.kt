@@ -3,6 +3,7 @@ package at.gnu.adventofcode.year2021
 import kotlin.math.abs
 import kotlin.math.max
 import kotlin.math.min
+import kotlin.math.sign
 
 class Day17(targetAreaFromInput: String) {
 
@@ -14,27 +15,24 @@ class Day17(targetAreaFromInput: String) {
     data class Area(val x1: Int, val y1: Int, val x2: Int, val y2: Int)
 
     private val targetArea: Area
+    private val xRange: IntRange
+    private val yRange: IntRange
 
     init {
         val (x1, x2, y1, y2) = targetAreaCommand.matchEntire(targetAreaFromInput)!!.destructured
         targetArea = Area(x1.toInt(), y1.toInt(), x2.toInt(), y2.toInt())
+        xRange = min(-abs(targetArea.x1), -abs(targetArea.x2))..max(abs(targetArea.x1), abs(targetArea.x2))
+        yRange = min(-abs(targetArea.y1), -abs(targetArea.y2))..max(abs(targetArea.y1), abs(targetArea.y2))
     }
 
-    fun part1(): Int {
-        var maxHeight = 0
-        for (x in min(-abs(targetArea.x1), -abs(targetArea.x2))..max(abs(targetArea.x1), abs(targetArea.x2)))
-            for (y in min(-abs(targetArea.y1), -abs(targetArea.y2))..max(abs(targetArea.y1), abs(targetArea.y2)))
-                maxHeight = max(maxHeight, shoot(x, y))
-        return maxHeight
-    }
+    fun part1(): Int =
+        simulateShootings().maxOf { it }
 
-    fun part2(): Int {
-        val hits = mutableSetOf<Pair<Int, Int>>()
-        for (x in min(-abs(targetArea.x1), -abs(targetArea.x2))..max(abs(targetArea.x1), abs(targetArea.x2)))
-            for (y in min(-abs(targetArea.y1), -abs(targetArea.y2))..max(abs(targetArea.y1), abs(targetArea.y2)))
-                if (shoot(x, y) >= 0) hits += Pair(x, y)
-        return hits.size
-    }
+    fun part2(): Int =
+        simulateShootings().filter { it >= 0 }.size
+
+    private fun simulateShootings(): List<Int> =
+        xRange.fold(listOf()) { acc, x -> acc + yRange.fold(listOf()) { acc2, y -> acc2 + shoot(x, y) } }
 
     private fun shoot(initialX: Int, initialY: Int): Int {
         var maxHeight = 0
@@ -51,7 +49,7 @@ class Day17(targetAreaFromInput: String) {
             else if ((pX >= targetArea.x2) || (pY < targetArea.y1))
                 return -1
             dY--
-            if (dX > 0) dX-- else if (dX < 0) dX++
+            dX -= dX.sign
         }
     }
 }
