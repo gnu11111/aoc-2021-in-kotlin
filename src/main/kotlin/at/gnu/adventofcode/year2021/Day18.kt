@@ -53,8 +53,8 @@ class Day18(private val numbers: List<String>) {
         val end = start + this.substring(start).indexOf(']')
         val snailFishNumber = """\[(\d+),(\d+)""".toRegex()
         val (first, second) = snailFishNumber.matchEntire(this.substring(start, end))!!.destructured
-        val left = this.substring(0, start).addToLastNumber(first)
-        val right = this.substring(end + 1).addToFirstNumber(second)
+        val left = this.substring(0, start).addToLastNumberLeft(first)
+        val right = this.substring(end + 1).addToFirstNumberRight(second)
         return left + "0" + right
     }
 
@@ -74,7 +74,7 @@ class Day18(private val numbers: List<String>) {
         return this
     }
 
-    private fun String.addToLastNumber(number: String): String {
+    private fun String.addToLastNumberLeft(number: String): String {
         var start = -1
         var end = -1
         for (i in (this.length - 1) downTo 0) {
@@ -92,7 +92,7 @@ class Day18(private val numbers: List<String>) {
         }
     }
 
-    private fun String.addToFirstNumber(number: String): String =
+    private fun String.addToFirstNumberRight(number: String): String =
         this.replace("""(\D*?)(\d+)(.*)""".toRegex()) {
             it.groupValues[1] + (it.groupValues[2].toInt() + number.toInt()) + it.groupValues[3]
         }
