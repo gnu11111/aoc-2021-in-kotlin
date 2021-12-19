@@ -7,13 +7,13 @@ class Day18(private val numbers: List<String>) {
     }
 
     fun part1(): Int =
-        numbers.fold("") { acc, number -> acc.add(number.reduceNumber()).reduceNumber() }.calculateMagnitude()
+        numbers.fold("") { acc, number -> acc.add(number).reduceNumber() }.calculateMagnitude()
 
     fun part2(): Int =
         numbers.indices.map { i ->
             numbers.indices.map { j ->
                 if (i != j)
-                    "".add(numbers[i].reduceNumber()).add(numbers[j].reduceNumber()).reduceNumber().calculateMagnitude()
+                    numbers[i].add(numbers[j]).reduceNumber().calculateMagnitude()
                 else
                     0
             }
