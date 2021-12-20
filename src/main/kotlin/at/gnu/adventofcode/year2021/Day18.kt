@@ -4,6 +4,8 @@ class Day18(private val numbers: List<String>) {
 
     companion object {
         const val input = "/adventofcode/year2021/Day18.txt"
+        const val threshold = 4
+        private val snailFishNumber = """\[(\d+),(\d+)""".toRegex()
     }
 
     fun part1(): Int =
@@ -28,7 +30,7 @@ class Day18(private val numbers: List<String>) {
         var i = -1
         while (++i < (number.length - 1)) {
             if (number[i] == '[') {
-                if (++brackets > 4) {
+                if (++brackets > threshold) {
                     val newNumber = number.explode(i)
                     if (newNumber != number) {
                         number = newNumber
@@ -42,16 +44,14 @@ class Day18(private val numbers: List<String>) {
         }
         val newSplitNumber = number.splitNumber()
         if (newSplitNumber != number) {
-            number = newSplitNumber
-//          println("after split:   $number")
-            return number.reduceNumber()
+//          println("after split:   $newSplitNumber")
+            return newSplitNumber.reduceNumber()
         }
         return number
     }
 
     private fun String.explode(start: Int): String {
         val end = start + this.substring(start).indexOf(']')
-        val snailFishNumber = """\[(\d+),(\d+)""".toRegex()
         val (first, second) = snailFishNumber.matchEntire(this.substring(start, end))!!.destructured
         val left = this.substring(0, start).addToLastNumberLeft(first)
         val right = this.substring(end + 1).addToFirstNumberRight(second)
