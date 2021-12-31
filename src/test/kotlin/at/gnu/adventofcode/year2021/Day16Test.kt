@@ -27,7 +27,7 @@ class Day16Test {
             val data = test[function]!!
             val result: Long
             val time = measureNanoTime { result = function.first.invoke(Day16(data.first)) }
-            println("Day01::${function.first.name}: ${data.first} -> $result [${time}ns]")
+            println("Day16::${function.first.name}: ${data.first} -> $result [${time}ns]")
             Assert.assertEquals(data.second, result)
         }
     }

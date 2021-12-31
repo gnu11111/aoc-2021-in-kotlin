@@ -50,23 +50,16 @@ class Day16(transmission: String) {
         private val subMessages = mutableListOf<Message>()
 
         companion object {
-            fun from(binary: String) =
+            fun from(binary: String): Message =
                 Message(Integer.parseInt(binary.substring(0, 3), 2),
                     Integer.parseInt(binary.substring(3, 6), 2), binary.substring(6))
         }
 
-        fun parse(): String =
-            when (typeId) {
-                4 -> {
-                    val result = parseLiteral(content)
-                    value = parseLong(result.first, 2)
-                    result.second
-                }
-                else -> parseOperator(content)
-            }
+        fun sumOfVersions(): Long =
+            subMessages.fold(version.toLong()) { acc, it -> acc + it.sumOfVersions() }
 
-        fun evaluate(): Long {
-            return when (typeId) {
+        fun evaluate(): Long =
+            when (typeId) {
                 0 -> subMessages.sumOf { it.evaluate() }
                 1 -> subMessages.fold(1) { acc, it -> acc * it.evaluate() }
                 2 -> subMessages.minOf { it.evaluate() }
@@ -77,18 +70,16 @@ class Day16(transmission: String) {
                 7 -> if (subMessages.first().evaluate() == subMessages.last().evaluate()) 1 else 0
                 else -> throw RuntimeException("unknown packet type '$typeId'")
             }
-        }
 
-        fun sumOfVersions(): Long {
-            var sum = version.toLong()
-            for (subMessage in subMessages)
-                sum += subMessage.sumOfVersions()
-            return sum
-        }
+        fun parse(): String =
+            when (typeId) {
+                4 -> parseLiteral(content)
+                else -> parseOperator(content)
+            }
 
-        private fun parseLiteral(content: String): Pair<String, String> {
+        private fun parseLiteral(content: String): String {
             var last = false
-            return content.chunked(5).fold(Pair("0", "")) { acc, it ->
+            val result = content.chunked(5).fold(Pair("0", "")) { acc, it ->
                 if (last)
                     Pair(acc.first, acc.second + it)
                 else {
@@ -97,6 +88,8 @@ class Day16(transmission: String) {
                     Pair(acc.first + it.substring(1), acc.second)
                 }
             }
+            value = parseLong(result.first, 2)
+            return result.second
         }
 
         private fun parseOperator(content: String): String =
