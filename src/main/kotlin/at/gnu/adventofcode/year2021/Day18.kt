@@ -60,7 +60,7 @@ class Day18(private val numbers: List<String>) {
 
     private fun String.splitNumber(): String {
         var start = -1
-        for (i in 0 until this.length) {
+        for (i in this.indices) {
             if ((this[i] in '0'..'9') && (start < 0))
                 start = i
             else if ((this[i] !in '0'..'9') && (start >= 0)) {
@@ -87,9 +87,8 @@ class Day18(private val numbers: List<String>) {
         }
         return if (start < 0)
             this
-        else {
+        else
             this.substring(0, start) + (this.substring(start, end).toInt() + number.toInt()) + this.substring(end)
-        }
     }
 
     private fun String.addToFirstNumberRight(number: String): String =

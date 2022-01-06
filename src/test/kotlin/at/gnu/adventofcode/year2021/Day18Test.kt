@@ -6,7 +6,7 @@ import kotlin.system.measureNanoTime
 
 class Day18Test {
 
-    private val shellfishNumbers = """
+    private val snailFishNumbers = """
         [[[0,[5,8]],[[1,7],[9,6]]],[[4,[1,2]],[[1,4],2]]]
         [[[5,[2,8]],4],[5,[[9,9],0]]]
         [6,[[[6,2],[5,6]],[[7,6],[4,7]]]]
@@ -26,11 +26,11 @@ class Day18Test {
 
     @Test
     fun testMySolution() {
-        val day18 = Day18(shellfishNumbers)
+        val day18 = Day18(snailFishNumbers)
         for (function in test.keys) {
             val result: Int
             val time = measureNanoTime { result = function(day18) }
-            println("Day18::${function.name}: ${shellfishNumbers.size} shellfish-numbers -> $result [${time}ns]")
+            println("Day18::${function.name}: ${snailFishNumbers.size} snail-fish-numbers -> $result [${time}ns]")
             Assert.assertEquals(test[function], result)
         }
     }
