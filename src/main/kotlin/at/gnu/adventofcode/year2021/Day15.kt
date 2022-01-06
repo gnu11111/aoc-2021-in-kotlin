@@ -1,5 +1,6 @@
 package at.gnu.adventofcode.year2021
 
+import java.util.*
 import kotlin.math.sqrt
 
 class Day15(input: List<String>) {
@@ -10,9 +11,12 @@ class Day15(input: List<String>) {
     }
 
     class Position(val x: Int, val y: Int, val risk: Int, var f: Double = 0.0, var g: Int = 0,
-                   var predecessor: Position? = null)
+                   var predecessor: Position? = null) : Comparable<Position> {
+        override fun compareTo(other: Position): Int =
+            this.f.compareTo(other.f)
+    }
 
-    private val map = input.mapIndexed { y, line -> line.mapIndexed { x, risk -> Position(x, y, risk - '0') } }
+    private val map = input.mapIndexed { y, line -> line.mapIndexed { x, risk -> Position(x, y, risk.digitToInt()) } }
 
     fun part1(): Int =
         calculateRiskOfSafestPath(map.first().first(), map.last().last()) { x: Int, y: Int ->
@@ -21,27 +25,27 @@ class Day15(input: List<String>) {
 
     fun part2(): Int {
         val bigMap = map.scaleBy(5)
-        return calculateRiskOfSafestPath(bigMap.first().first(), bigMap.last().last()) { x: Int, y: Int ->
+        return calculateRiskOfSafestPath(bigMap.first().first(), bigMap.last().last(), ::aStar) { x: Int, y: Int ->
             bigMap.elementAtOrNull(y)?.elementAtOrNull(x) ?: outOfBounds
         }
     }
 
-    private fun calculateRiskOfSafestPath(from: Position, to: Position, positionAt: (Int, Int) -> Position): Int {
-        val openList = mutableListOf(from)
+    private fun calculateRiskOfSafestPath(from: Position, to: Position, h: (Position, Position) -> Double = ::dijkstra,
+                                          positionAt: (Int, Int) -> Position): Int {
+        val openList = PriorityQueue<Position>().apply { add(from) }
         val closedList = mutableSetOf<Position>()
         while (openList.isNotEmpty()) {
-            val currentPosition = openList.minByOrNull { it.f }!!
-            openList -= currentPosition
+            val currentPosition = openList.poll()
             if (currentPosition === to)
                 return currentPosition.g
             closedList += currentPosition
-            currentPosition.expand(to, openList, closedList, positionAt)
+            currentPosition.expand(to, openList, closedList, h, positionAt)
         }
         return -1
     }
 
-    private fun Position.expand(to: Position, openList: MutableList<Position>, closedList: Set<Position>,
-                                positionAt: (Int, Int) -> Position) {
+    private fun Position.expand(to: Position, openList: PriorityQueue<Position>, closedList: Set<Position>,
+                                h: (Position, Position) -> Double, positionAt: (Int, Int) -> Position) {
         for (successor in this.neighbors(positionAt)) {
             if (successor in closedList)
                 continue
@@ -50,7 +54,7 @@ class Day15(input: List<String>) {
                 continue
             successor.predecessor = this
             successor.g = tentativeG
-            val f = tentativeG + successor.h(to)
+            val f = tentativeG + h(successor, to)
             successor.f = f
             if (successor !in openList)
                 openList += successor
@@ -61,12 +65,12 @@ class Day15(input: List<String>) {
         val map = mutableListOf<List<Position>>()
         for (yScale in 0 until scaleFactor)
             for (y in this.indices) {
-                val line = mutableListOf<Position>()
+                val row = mutableListOf<Position>()
                 for (xScale in 0 until scaleFactor)
                     for (x in this[y].indices)
-                        line.add(Position((this.first().size * xScale) + x, (this.size * yScale) + y,
+                        row.add(Position((this.first().size * xScale) + x, (this.size * yScale) + y,
                             ((this[y][x].risk + yScale + xScale - 1) % 9) + 1))
-                map.add(line.toList())
+                map.add(row.toList())
             }
         return map.toList()
     }
@@ -74,8 +78,11 @@ class Day15(input: List<String>) {
     private fun Position.neighbors(positionAt: (Int, Int) -> Position): Set<Position> =
         setOf(positionAt(x, y + 1), positionAt(x + 1, y), positionAt(x - 1, y), positionAt(x, y - 1))
 
-    private fun Position.h(to: Position): Double =
-        sqrt((((this.x - to.x) * (this.x - to.x)) + ((this.y - to.y) * (this.y - to.y))).toDouble())
+    @Suppress("UNUSED_PARAMETER")
+    private fun dijkstra(from: Position, to: Position): Double = 0.0
+
+    private fun aStar(from: Position, to: Position): Double =
+        sqrt((((from.x - to.x) * (from.x - to.x)) + ((from.y - to.y) * (from.y - to.y))).toDouble())
 }
 
 fun main() {
