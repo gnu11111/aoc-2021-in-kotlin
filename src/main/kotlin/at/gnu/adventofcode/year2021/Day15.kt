@@ -6,12 +6,13 @@ class Day15(input: List<String>) {
 
     companion object {
         const val input = "/adventofcode/year2021/Day15.txt"
-        val outOfBounds = Node(-1, -1, Int.MAX_VALUE)
+        val outOfBounds = Position(-1, -1, Int.MAX_VALUE)
     }
 
-    class Node(val x: Int, val y: Int, val cost: Int, var f: Double = 0.0, var g: Int = 0, var prev: Node? = null)
+    class Position(val x: Int, val y: Int, val risk: Int, var f: Double = 0.0, var g: Int = 0,
+                   var predecessor: Position? = null)
 
-    private val map = input.mapIndexed { y, line -> line.mapIndexed { x, level -> Node(x, y, level - '0') } }
+    private val map = input.mapIndexed { y, line -> line.mapIndexed { x, level -> Position(x, y, level - '0') } }
 
     fun part1(): Int =
         safestPath(map.first().first(), map.last().last()) { x: Int, y: Int ->
@@ -25,42 +26,29 @@ class Day15(input: List<String>) {
         }
     }
 
-    private fun List<List<Node>>.multiplyBy(scale: Int): List<List<Node>> {
-        val map = mutableListOf<List<Node>>()
-        for (yScale in 0 until scale)
-            for (y in this.indices) {
-                val line = mutableListOf<Node>()
-                for (xScale in 0 until scale)
-                    for (x in this[y].indices)
-                        line.add(Node((this.first().size * xScale) + x, (this.size * yScale) + y,
-                            ((this[y][x].cost + yScale + xScale - 1) % 9) + 1))
-                map.add(line.toList())
-            }
-        return map.toList()
-    }
-
-    private fun safestPath(from: Node, to: Node, nodeAt: (Int, Int) -> Node): Int {
+    private fun safestPath(from: Position, to: Position, positionAt: (Int, Int) -> Position): Int {
         val openList = mutableListOf(from)
-        val closedList = mutableSetOf<Node>()
+        val closedList = mutableSetOf<Position>()
         while (openList.isNotEmpty()) {
-            val currentNode = openList.minByOrNull { it.f }!!
-            openList -= currentNode
-            if (currentNode === to)
-                return currentNode.g
-            closedList += currentNode
-            currentNode.expand(to, openList, closedList, nodeAt)
+            val currentPosition = openList.minByOrNull { it.f }!!
+            openList -= currentPosition
+            if (currentPosition === to)
+                return currentPosition.g
+            closedList += currentPosition
+            currentPosition.expand(to, openList, closedList, positionAt)
         }
         return -1
     }
 
-    private fun Node.expand(to: Node, openList: MutableList<Node>, closedList: Set<Node>, nodeAt: (Int, Int) -> Node) {
-        for (successor in neighbors(nodeAt)) {
+    private fun Position.expand(to: Position, openList: MutableList<Position>, closedList: Set<Position>,
+                                positionAt: (Int, Int) -> Position) {
+        for (successor in this.neighbors(positionAt)) {
             if (successor in closedList)
                 continue
-            val tentativeG = this.g + successor.cost
+            val tentativeG = this.g + successor.risk
             if ((successor in openList) && (tentativeG >= successor.g))
                 continue
-            successor.prev = this
+            successor.predecessor = this
             successor.g = tentativeG
             val f = tentativeG + successor.h(to)
             successor.f = f
@@ -69,10 +57,24 @@ class Day15(input: List<String>) {
         }
     }
 
-    private fun Node.neighbors(nodeAt: (Int, Int) -> Node): Set<Node> =
-        setOf(nodeAt(x, y + 1), nodeAt(x + 1, y), nodeAt(x - 1, y), nodeAt(x, y - 1))
+    private fun List<List<Position>>.multiplyBy(scale: Int): List<List<Position>> {
+        val map = mutableListOf<List<Position>>()
+        for (yScale in 0 until scale)
+            for (y in this.indices) {
+                val line = mutableListOf<Position>()
+                for (xScale in 0 until scale)
+                    for (x in this[y].indices)
+                        line.add(Position((this.first().size * xScale) + x, (this.size * yScale) + y,
+                            ((this[y][x].risk + yScale + xScale - 1) % 9) + 1))
+                map.add(line.toList())
+            }
+        return map.toList()
+    }
 
-    private fun Node.h(to: Node): Double =
+    private fun Position.neighbors(positionAt: (Int, Int) -> Position): Set<Position> =
+        setOf(positionAt(x, y + 1), positionAt(x + 1, y), positionAt(x - 1, y), positionAt(x, y - 1))
+
+    private fun Position.h(to: Position): Double =
         sqrt((((this.x - to.x) * (this.x - to.x)) + ((this.y - to.y) * (this.y - to.y))).toDouble())
 }
 
