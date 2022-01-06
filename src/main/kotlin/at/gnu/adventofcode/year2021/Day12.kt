@@ -21,8 +21,8 @@ class Day12(input: List<String>) {
         paths.getPathsFrom(start).sumOf { it.sumOfPaths(twice = true) }
 
     private fun Path.sumOfPaths(visitedCaves: Set<String> = emptySet(), twice: Boolean = false): Int {
-        val isSecondVisit = twice && (this.to != start) && this.to.all(Char::isLowerCase) && (this.to in visitedCaves)
         val isEndPoint = (this.to == end)
+        val isSecondVisit = twice && (this.to != start) && this.to.isSmallCaveVisited(visitedCaves)
         return when {
             isEndPoint -> 1
             isSecondVisit -> paths.getPathsFrom(this.to).sumOf { it.sumOfPaths(visitedCaves + this.from, false) }
@@ -31,7 +31,10 @@ class Day12(input: List<String>) {
     }
 
     private fun Set<Path>.getPathsFrom(cave: String, visitedCaves: Set<String> = emptySet()): Set<Path> =
-        this.filter { (it.from == cave) && !(cave.all(Char::isLowerCase) && visitedCaves.contains(cave)) }.toSet()
+        this.filter { (it.from == cave) && !cave.isSmallCaveVisited(visitedCaves) }.toSet()
+
+    private fun String.isSmallCaveVisited(visitedCaves: Set<String>): Boolean =
+        this.all(Char::isLowerCase) && (this in visitedCaves)
 }
 
 fun main() {
