@@ -10,23 +10,22 @@ class Day12(input: List<String>) {
 
     data class Path(val from: String, val to: String)
 
-    private val paths = input.map { it.split("-") }.flatMap {
-        Pair(Path(it[0], it[1]), Path(it[1], it[0])).toList()
-    }.toSet()
+    private val paths = input.map { it.split("-") }
+        .flatMap { Pair(Path(it[0], it[1]), Path(it[1], it[0])).toList() }.toSet()
 
     fun part1(): Int =
-        paths.getPathsFrom(start).sumOf { it.sumOfPaths() }
+        paths.getPathsFrom(start).sumOf { it.countPaths() }
 
     fun part2(): Int =
-        paths.getPathsFrom(start).sumOf { it.sumOfPaths(twice = true) }
+        paths.getPathsFrom(start).sumOf { it.countPaths(twice = true) }
 
-    private fun Path.sumOfPaths(visitedCaves: Set<String> = emptySet(), twice: Boolean = false): Int {
+    private fun Path.countPaths(visitedCaves: Set<String> = emptySet(), twice: Boolean = false): Int {
         val isEndPoint = (this.to == end)
         val isSecondVisit = twice && (this.to != start) && this.to.isSmallCaveVisited(visitedCaves)
         return when {
             isEndPoint -> 1
-            isSecondVisit -> paths.getPathsFrom(this.to).sumOf { it.sumOfPaths(visitedCaves + this.from, false) }
-            else -> paths.getPathsFrom(this.to, visitedCaves).sumOf { it.sumOfPaths(visitedCaves + this.from, twice) }
+            isSecondVisit -> paths.getPathsFrom(this.to).sumOf { it.countPaths(visitedCaves + this.from, false) }
+            else -> paths.getPathsFrom(this.to, visitedCaves).sumOf { it.countPaths(visitedCaves + this.from, twice) }
         }
     }
 
