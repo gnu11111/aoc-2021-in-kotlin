@@ -12,21 +12,21 @@ class Day15(input: List<String>) {
     class Position(val x: Int, val y: Int, val risk: Int, var f: Double = 0.0, var g: Int = 0,
                    var predecessor: Position? = null)
 
-    private val map = input.mapIndexed { y, line -> line.mapIndexed { x, level -> Position(x, y, level - '0') } }
+    private val map = input.mapIndexed { y, line -> line.mapIndexed { x, risk -> Position(x, y, risk - '0') } }
 
     fun part1(): Int =
-        safestPath(map.first().first(), map.last().last()) { x: Int, y: Int ->
+        calculateRiskOfSafestPath(map.first().first(), map.last().last()) { x: Int, y: Int ->
             map.elementAtOrNull(y)?.elementAtOrNull(x) ?: outOfBounds
         }
 
     fun part2(): Int {
-        val bigMap = map.multiplyBy(5)
-        return safestPath(bigMap.first().first(), bigMap.last().last()) { x: Int, y: Int ->
+        val bigMap = map.scaleBy(5)
+        return calculateRiskOfSafestPath(bigMap.first().first(), bigMap.last().last()) { x: Int, y: Int ->
             bigMap.elementAtOrNull(y)?.elementAtOrNull(x) ?: outOfBounds
         }
     }
 
-    private fun safestPath(from: Position, to: Position, positionAt: (Int, Int) -> Position): Int {
+    private fun calculateRiskOfSafestPath(from: Position, to: Position, positionAt: (Int, Int) -> Position): Int {
         val openList = mutableListOf(from)
         val closedList = mutableSetOf<Position>()
         while (openList.isNotEmpty()) {
@@ -57,12 +57,12 @@ class Day15(input: List<String>) {
         }
     }
 
-    private fun List<List<Position>>.multiplyBy(scale: Int): List<List<Position>> {
+    private fun List<List<Position>>.scaleBy(scaleFactor: Int): List<List<Position>> {
         val map = mutableListOf<List<Position>>()
-        for (yScale in 0 until scale)
+        for (yScale in 0 until scaleFactor)
             for (y in this.indices) {
                 val line = mutableListOf<Position>()
-                for (xScale in 0 until scale)
+                for (xScale in 0 until scaleFactor)
                     for (x in this[y].indices)
                         line.add(Position((this.first().size * xScale) + x, (this.size * yScale) + y,
                             ((this[y][x].risk + yScale + xScale - 1) % 9) + 1))
