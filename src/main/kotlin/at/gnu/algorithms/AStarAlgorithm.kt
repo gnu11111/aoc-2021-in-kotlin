@@ -1,5 +1,6 @@
 package at.gnu.algorithms
 
+import java.util.*
 import kotlin.math.sqrt
 
 class AStarAlgorithm(private val field: List<List<Node>>) {
@@ -8,15 +9,20 @@ class AStarAlgorithm(private val field: List<List<Node>>) {
         val outOfBounds = Node(-1, -1, Int.MAX_VALUE)
     }
 
-    data class Node(val x: Int, val y: Int, val cost: Int, var f: Double = 0.0, var g: Int = 0, var prev: Node? = null)
+    class Node(val x: Int, val y: Int, val cost: Int, var f: Double = 0.0, var g: Int = 0,
+               var predecessor: Node? = null) : Comparable<Node> {
 
-    private val openList = mutableListOf<Node>()
+        override fun compareTo(other: Node): Int =
+            this.f.compareTo(other.f)
+    }
+
+    private val openList = PriorityQueue<Node>()
     private val closedList = mutableSetOf<Node>()
 
     fun cheapestPath(from: Node, to: Node): Int {
-        openList.add(from)
+        openList += from
         while (openList.isNotEmpty()) {
-            val currentNode = openList.minByOrNull { it.f }!!
+            val currentNode = openList.poll()
             openList -= currentNode
             if (currentNode === to)
                 return currentNode.g
@@ -33,7 +39,7 @@ class AStarAlgorithm(private val field: List<List<Node>>) {
             val tentativeG = this.g + successor.cost
             if ((successor in openList) && (tentativeG >= successor.g))
                 continue
-            successor.prev = this
+            successor.predecessor = this
             successor.g = tentativeG
             val f = tentativeG + successor.h(to)
             successor.f = f
@@ -84,10 +90,10 @@ fun main() {
 private fun List<List<AStarAlgorithm.Node>>.visualizePath(to: AStarAlgorithm.Node) {
     val smallNumbers = "₀₁₂₃₄₅₆₇₈₉"
     val nodes = mutableListOf(to)
-    var current = to.prev
+    var current = to.predecessor
     while (current != null) {
         nodes.add(current)
-        current = current.prev
+        current = current.predecessor
     }
     for (y in this.indices) {
         for (x in this[y].indices) {
