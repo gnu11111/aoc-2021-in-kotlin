@@ -8,15 +8,15 @@ class DijkstrasAlgorithm(private val field: List<List<Point>>) {
         val outOfBounds = Point(-1, -1, Int.MAX_VALUE)
     }
 
-    data class Point(val x: Int, val y: Int, val cost: Int)
+    class Point(val x: Int, val y: Int, val cost: Int)
 
-    fun cheapestPath(from: Point, to: Point, minCost: Int = Integer.MAX_VALUE, cost: Int = 0,
-                     path: Set<Point> = emptySet()): Int =
+    fun calculateCostOfCheapestPath(from: Point, to: Point, minCost: Int = Integer.MAX_VALUE, cost: Int = 0,
+                                    path: Set<Point> = emptySet()): Int =
         when {
             (from === outOfBounds) || (from in path) -> minCost
             (from === to) -> min(cost, minCost)
             else -> from.adjacentPoints().fold(minCost) { acc, it ->
-                cheapestPath(it, to, acc, cost + it.cost, path + from)
+                calculateCostOfCheapestPath(it, to, acc, cost + it.cost, path + from)
             }
         }
 
@@ -47,10 +47,9 @@ fun main() {
     }
     val from = field.first().first()
     val to = field.last().last()
-    val minCost = DijkstrasAlgorithm(field).cheapestPath(from, to)
-
+    val minCost = DijkstrasAlgorithm(field).calculateCostOfCheapestPath(from, to)
     if (minCost < Int.MAX_VALUE)
-        println("The cheapest path from $from to $to costs $minCost")
+        println("The cheapest path from ${from.x}/${from.y} to ${to.x}/${to.y} costs $minCost")
     else
-        println("Destination $to cannot be reached from source $from")
+        println("Destination ${to.x}/${to.y} cannot be reached from source ${from.x}/${from.y}")
 }
