@@ -54,8 +54,7 @@ class Day15(input: List<String>) {
                 continue
             successor.predecessor = this
             successor.g = tentativeG
-            val f = tentativeG + h(successor, to)
-            successor.f = f
+            successor.f = tentativeG + h(successor, to)
             if (successor !in openList)
                 openList += successor
         }

@@ -41,8 +41,7 @@ class AStarAlgorithm(private val field: List<List<Node>>) {
                 continue
             successor.predecessor = this
             successor.g = tentativeG
-            val f = tentativeG + successor.h(to)
-            successor.f = f
+            successor.f = tentativeG + successor.h(to)
             if (successor !in openList)
                 openList += successor
         }
