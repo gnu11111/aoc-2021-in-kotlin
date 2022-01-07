@@ -58,7 +58,7 @@ class AStarAlgorithm(private val field: List<List<Node>>) {
 }
 
 fun main() {
-    val input = listOf(
+    val costs = listOf(
         listOf(1, 1, 6, 3, 7, 5, 1, 7, 4, 2),
         listOf(1, 3, 8, 1, 3, 7, 3, 6, 7, 2),
         listOf(2, 1, 3, 6, 5, 1, 1, 3, 2, 8),
@@ -70,7 +70,7 @@ fun main() {
         listOf(1, 2, 9, 3, 1, 3, 8, 5, 2, 1),
         listOf(2, 3, 1, 1, 9, 4, 4, 5, 8, 1),
     )
-    val field = input.mapIndexed { y, line ->
+    val field = costs.mapIndexed { y, line ->
         line.mapIndexed { x, cost ->
             if (cost > 0) AStarAlgorithm.Node(x, y, cost) else AStarAlgorithm.outOfBounds
         }
