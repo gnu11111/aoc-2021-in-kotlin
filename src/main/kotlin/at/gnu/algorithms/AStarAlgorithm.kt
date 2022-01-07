@@ -19,7 +19,7 @@ class AStarAlgorithm(private val field: List<List<Node>>) {
     private val openList = PriorityQueue<Node>()
     private val closedList = mutableSetOf<Node>()
 
-    fun cheapestPath(from: Node, to: Node): Int {
+    fun calculateCostOfCheapestPath(from: Node, to: Node): Int {
         openList += from
         while (openList.isNotEmpty()) {
             val currentNode = openList.poll()
@@ -78,7 +78,7 @@ fun main() {
     }
     val from = field.first().first()
     val to = field.last().last()
-    val minCost = AStarAlgorithm(field).cheapestPath(from, to)
+    val minCost = AStarAlgorithm(field).calculateCostOfCheapestPath(from, to)
     if (minCost >= 0)
         println("The cheapest path from ${from.x}/${from.y} to ${to.x}/${to.y} costs $minCost")
     else
