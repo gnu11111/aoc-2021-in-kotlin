@@ -59,7 +59,7 @@ class Day24(source: List<String>) {
                     transitions[i]!!.add(Transition(digit, previousTransition.value, result.value))
                 }
             runFromLine = result.line
-            println("digit: $i, line: $runFromLine, unique results: ${transitions[i]!!.size}")
+//          println("digit: $i, line: $runFromLine, unique results: ${transitions[i]!!.size}")
         }
         return transitions.toMap()
     }
