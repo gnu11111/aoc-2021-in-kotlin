@@ -1,17 +1,15 @@
 package at.gnu.adventofcode.year2021
 
-import kotlin.math.pow
-
 class Day24(source: List<String>) {
 
     companion object {
         const val input = "/adventofcode/year2021/Day24.txt"
-        val statement = """(inp|add|mul|div|mod|eql)\s+([wxyz])(\s+(-?\d+|[wxyz]))*""".toRegex()
         const val digits = 14
         const val w = "w"
         const val x = "x"
         const val y = "y"
         const val z = "z"
+        val statement = """(inp|add|mul|div|mod|eql)\s+([wxyz])(\s+(-?\d+|[wxyz]))*""".toRegex()
     }
 
     sealed class Statement
@@ -22,7 +20,7 @@ class Day24(source: List<String>) {
     class Mod(val a: String, val b: String, val value: Int? = null) : Statement()
     class Eql(val a: String, val b: String, val value: Int? = null) : Statement()
 
-    class Result(val ip: Int = 0, val value: Int = 0)
+    class Result(val line: Int = 0, val value: Int = 0)
     class Transition(val digit: Int = 0, val previousValue: Int = 0, val value: Int = 0) {
         override fun hashCode(): Int = value.hashCode()
         override fun equals(other: Any?): Boolean = (value == (other as Transition).value)
@@ -43,12 +41,12 @@ class Day24(source: List<String>) {
     }
 
     fun part1(): Long =
-        statements.calculateModelNumber()
+        statements.executeCode().calculateModelNumber()
 
     fun part2(): Long =
-        statements.calculateModelNumber(1..9)
+        statements.executeCode(1..9).calculateModelNumber()
 
-    private fun List<Statement>.calculateModelNumber(digitRange: IntProgression = 9 downTo 1): Long {
+    private fun List<Statement>.executeCode(digitRange: IntProgression = 9 downTo 1): Map<Int, Set<Transition>> {
         val transitions = mutableMapOf<Int, MutableSet<Transition>>()
         transitions[0] = mutableSetOf(Transition())
         var result = Result()
@@ -57,38 +55,43 @@ class Day24(source: List<String>) {
             transitions[i] = mutableSetOf()
             for (previousTransition in transitions[i-1]!!)
                 for (digit in digitRange) {
-                    result = this.execute(digit, runFromLine, previousTransition.value)
+                    result = this.executeCodeUntilNextInput(digit, runFromLine, previousTransition.value)
                     transitions[i]!!.add(Transition(digit, previousTransition.value, result.value))
                 }
-            runFromLine = result.ip
-//          println("digit: $i, line: $runFromLine, unique results: ${transitions[i]!!.size}")
+            runFromLine = result.line
+            println("digit: $i, line: $runFromLine, unique results: ${transitions[i]!!.size}")
         }
-        var value = 0
-        var modelNumber = 0L
-        for (i in 0 until digits) {
-            val transition = transitions[digits-i]!!.firstOrNull { it.value == value } ?: return -1L
-            value = transition.previousValue
-            modelNumber += (10.0.pow(i).toLong() * transition.digit)
-        }
-        return modelNumber
+        return transitions.toMap()
     }
 
-    private fun List<Statement>.execute(digit: Int, runFrom: Int = 0, value: Int = 0): Result {
-        val r = mutableMapOf(w to 0, x to 0, y to 0, z to value)
-        var ip = runFrom
+    private fun List<Statement>.executeCodeUntilNextInput(input: Int, runFromLine: Int = 0,
+                                                          initialZvalue: Int = 0): Result {
+        val r = mutableMapOf(w to 0, x to 0, y to 0, z to initialZvalue)
         var firstInp = true
-        this.drop(ip).forEach {
-            when (it) {
-                is Inp -> if (firstInp) { r[it.a] = digit; firstInp = false } else return Result(ip, r[z]!!)
+        for (line in runFromLine until this.size) {
+            when (val it = this[line]) {
+                is Inp -> if (firstInp) { r[it.a] = input; firstInp = false } else return Result(line, r[z]!!)
                 is Add -> r[it.a] = r[it.a]!! + (it.value ?: r[it.b]!!)
                 is Mul -> r[it.a] = r[it.a]!! * (it.value ?: r[it.b]!!)
                 is Div -> r[it.a] = r[it.a]!! / (it.value ?: r[it.b]!!)
                 is Mod -> r[it.a] = r[it.a]!! % (it.value ?: r[it.b]!!)
                 is Eql -> r[it.a] = if (r[it.a]!! == (it.value ?: r[it.b]!!)) 1 else 0
             }
-            ip++
         }
-        return Result(ip, r[z]!!)
+        return Result(this.size, r[z]!!)
+    }
+
+    private fun Map<Int, Set<Transition>>.calculateModelNumber(): Long {
+        var value = 0
+        var power = 1L
+        var modelNumber = 0L
+        for (i in 0 until digits) {
+            val transition = this[digits-i]!!.firstOrNull { it.value == value } ?: return -1L
+            value = transition.previousValue
+            modelNumber += (power * transition.digit)
+            power *= 10
+        }
+        return modelNumber
     }
 }
 
