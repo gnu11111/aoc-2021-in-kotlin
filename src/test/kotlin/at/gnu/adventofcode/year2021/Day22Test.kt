@@ -70,18 +70,18 @@ class Day22Test {
     """.trimIndent().split("\n")
 
     private val test = mapOf(
-        Day22::part1 to (rebootSteps to 474140L),
-        Day22::part2 to (rebootSteps to 2758514936282235L)
+        Day22::part1 to 474140L,
+        Day22::part2 to 2758514936282235L
     )
 
     @Test
     fun testMySolution() {
+        val day22 = Day22(rebootSteps)
         for (function in test.keys) {
-            val data = test[function]!!
             val result: Long
-            val time = measureNanoTime { result = function.invoke(Day22(data.first)) }
-            println("Day22::${function.name}: ${data.first.size} command lines -> $result [${time}ns]")
-            Assert.assertEquals(data.second, result)
+            val time = measureNanoTime { result = function.invoke(day22) }
+            println("Day22::${function.name}: ${rebootSteps.size} command lines -> $result [${time}ns]")
+            Assert.assertEquals(test[function], result)
         }
     }
 }
