@@ -7,11 +7,13 @@ class Day21(input: List<String>) {
     companion object {
         const val input = "/adventofcode/year2021/Day21.txt"
         const val rollsPerRound = 3
+        const val normalGameWinningScore = 1000
+        const val dircacGameWinningScore = 21
         val command = """Player (\d+) starting position: (\d+)""".toRegex()
     }
 
     data class Game(val players: List<Player>, var player: Player, var rolls: Int = 0, var dice: Int = 0)
-    data class Player(val id: Int, var position: Int = 0, var score: Int = 0, var won: Long = 0L)
+    data class Player(val id: Int, var position: Int = 0, var score: Int = 0)
 
     private val players = input.map {
         val (id, startingPosition) = command.matchEntire(it)!!.destructured
@@ -26,11 +28,6 @@ class Day21(input: List<String>) {
         return max(result.first, result.second)
     }
 
-    private fun initGame(players: List<Player>): Game {
-        val newPlayers = players.map { it.copy() }
-        return Game(newPlayers, newPlayers.first())
-    }
-
     private fun playDiracGame(pos1: Int, pos2: Int, score1: Int = 0, score2: Int = 0,
                               memo: MutableMap<String, Pair<Long, Long>> = mutableMapOf()): Pair<Long, Long> {
         memo["$pos1,$pos2,$score1,$score2"]?.let { return it }
@@ -40,7 +37,7 @@ class Day21(input: List<String>) {
                 for (dice3 in 1..3) {
                     val newPos = ((pos1 + dice1 + dice2 + dice3 - 1) % 10) + 1
                     val newScore = score1 + newPos
-                    if (newScore >= 21)
+                    if (newScore >= dircacGameWinningScore)
                         wins[0]++
                     else {
                         val newWins = playDiracGame(pos2, newPos, score2, newScore, memo)
@@ -50,14 +47,18 @@ class Day21(input: List<String>) {
                 }
             }
         }
-        memo["$pos1,$pos2,$score1,$score2"] = Pair(wins[0], wins[1])
-        return memo["$pos1,$pos2,$score1,$score2"]!!
+        return Pair(wins[0], wins[1]).also { memo["$pos1,$pos2,$score1,$score2"] = it }
+    }
+
+    private fun initGame(players: List<Player>): Game {
+        val newPlayers = players.map { it.copy() }
+        return Game(newPlayers, newPlayers.first())
     }
 
     private fun Game.playNormalGame(): Long {
         while (true) {
             this.playNormalRound(rollsPerRound)
-            if (this.player.score >= 1000)
+            if (this.player.score >= normalGameWinningScore)
                 return (this.otherPlayer().score * this.rolls).toLong()
             this.switchPlayer()
         }
