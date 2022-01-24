@@ -11,7 +11,7 @@ class Day05(input: List<String>) {
     }
 
     data class Coordinate(val x: Int, val y: Int)
-    data class Line(val from: Coordinate, val to: Coordinate)
+    class Line(val from: Coordinate, val to: Coordinate)
 
     private val lines: List<Line>
 

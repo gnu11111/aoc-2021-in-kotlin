@@ -6,7 +6,7 @@ class Day23(input: List<String>) {
         const val input = "/adventofcode/year2021/Day23.txt"
     }
 
-    data class Amphipod(val type: Int, val slot: Int, val position: Int)
+    class Amphipod(val type: Int, val slot: Int, val position: Int)
 
     private val amphipods = listOf(Amphipod(input[2][3] - 'A', 0, 1), Amphipod(input[3][3] - 'A', 0, 0),
         Amphipod(input[2][5] - 'A', 1, 1), Amphipod(input[3][5] - 'A', 1, 0), Amphipod(input[2][7] - 'A', 2, 1),

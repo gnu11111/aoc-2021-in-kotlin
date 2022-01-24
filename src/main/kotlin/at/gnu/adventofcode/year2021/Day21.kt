@@ -12,7 +12,7 @@ class Day21(input: List<String>) {
         val command = """Player (\d+) starting position: (\d+)""".toRegex()
     }
 
-    data class Game(val players: List<Player>, var player: Player, var rolls: Int = 0, var dice: Int = 0)
+    class Game(val players: List<Player>, var player: Player, var rolls: Int = 0, var dice: Int = 0)
     data class Player(val id: Int, var position: Int = 0, var score: Int = 0)
 
     private val players = input.map {

@@ -12,7 +12,7 @@ class Day17(targetAreaFromInput: String) {
         private val targetAreaCommand = """target area: x=(-?\d+)\.\.(-?\d+), y=(-?\d+)\.\.(-?\d+)""".toRegex()
     }
 
-    data class Area(val x1: Int, val y1: Int, val x2: Int, val y2: Int)
+    class Area(val x1: Int, val y1: Int, val x2: Int, val y2: Int)
 
     private val targetArea: Area
     private val xRange: IntRange

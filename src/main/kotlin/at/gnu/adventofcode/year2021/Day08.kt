@@ -6,7 +6,7 @@ class Day08(input: List<String>) {
         const val input = "/adventofcode/year2021/Day08.txt"
     }
 
-    data class Display(val signalPatterns: List<Set<Char>>, val outputValues: List<Set<Char>>)
+    class Display(val signalPatterns: List<Set<Char>>, val outputValues: List<Set<Char>>)
 
     private val displays: List<Display> = input.fold(listOf()) { acc, line ->
         val (signalPatternsStrings, outputValuesStrings) = line.split(" | ").map { it.split(" ") }
