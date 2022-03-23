@@ -7,7 +7,7 @@ class Day04(input: List<String>) {
         const val boardSize = 5
     }
 
-    data class Board(val winningNumbers: Set<Set<Int>>)
+    class Board(val winningNumbers: Set<Set<Int>>)
 
     private val drawnNumbers: List<Int> = input.first().split(",").map { it.toInt() }
     private val boards: List<Board>

@@ -8,7 +8,7 @@ class Day12(input: List<String>) {
         const val end = "end"
     }
 
-    data class Path(val from: String, val to: String)
+    class Path(val from: String, val to: String)
 
     private val paths = input.map { it.split("-") }
         .flatMap { Pair(Path(it[0], it[1]), Path(it[1], it[0])).toList() }.toSet()

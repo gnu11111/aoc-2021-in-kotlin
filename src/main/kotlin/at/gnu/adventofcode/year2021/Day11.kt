@@ -8,7 +8,7 @@ class Day11(val input: List<String>) {
         val outOfBounds = Octopus(-1, -1, 0)
     }
 
-    data class Octopus(val x: Int, val y: Int, val initialLevel: Int, var energyLevel: Int = 0)
+    class Octopus(val x: Int, val y: Int, val initialLevel: Int, var energyLevel: Int = 0)
 
     private val octopusses = input.mapIndexed { y, l -> l.mapIndexed { x, c -> Octopus(x, y, c - '0') } }.flatten()
     private val maxX = input.first().length

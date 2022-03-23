@@ -8,7 +8,7 @@ class Day09(val input: List<String>) {
         val outOfBounds = Point(0, 0, threshold + 1)
     }
 
-    data class Point(val x: Int, val y: Int, val value: Int)
+    class Point(val x: Int, val y: Int, val value: Int)
 
     private val heightmap = input.mapIndexed { y, line -> line.mapIndexed { x, char -> Point(x, y, char - '0') } }
 
