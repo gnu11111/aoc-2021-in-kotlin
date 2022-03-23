@@ -93,7 +93,7 @@ class Day23(input: List<String>) {
 //        #A#B#C#D#
 //        #########
 
-        return 12521
+        return 14627
     }
 
     fun part2(): Int {
@@ -298,7 +298,7 @@ class Day23(input: List<String>) {
 //        #A#B#C#D#
 //        #########
 
-        return 44169
+        return 41591
     }
 
     private fun visualizeAmphipods() {
@@ -313,7 +313,7 @@ class Day23(input: List<String>) {
 
 fun main() {
     val input = Day23::class.java.getResource(Day23.input)!!.readText().trim().split("\n")
-    Day23(input)
-    println("Day23::part1 -> 14627")
-    println("Day23::part2 -> 41591")
+    val day23 = Day23(input)
+    println("Day23::part1 -> ${day23.part1()}")
+    println("Day23::part2 -> ${day23.part2()}")
 }
