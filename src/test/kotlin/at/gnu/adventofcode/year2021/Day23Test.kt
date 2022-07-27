@@ -25,8 +25,8 @@ class Day23Test {
     """.trimIndent().split("\n")
 
     private val test = mapOf(
-        Day23::part1 to (amphipods to 12521),
-        Day23::part2 to (amphipods2 to 44169)
+        Day23::part1 to (amphipods to 14627),
+        Day23::part2 to (amphipods2 to 41591)
     )
 
     @Test
