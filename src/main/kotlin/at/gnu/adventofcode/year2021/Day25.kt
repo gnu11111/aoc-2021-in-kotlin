@@ -2,9 +2,8 @@ package at.gnu.adventofcode.year2021
 
 class Day25(private val cucumbersMap: List<String>) {
 
-
     companion object {
-        const val input = "/adventofcode/year2021/Day25.txt"
+        const val RESOURCE = "/adventofcode/year2021/Day25.txt"
     }
 
     private val maxX = cucumbersMap.first().length
@@ -49,7 +48,7 @@ class Day25(private val cucumbersMap: List<String>) {
 }
 
 fun main() {
-    val input = Day25::class.java.getResource(Day25.input)!!.readText().trim().split("\n", "\r\n")
+    val input = Day25::class.java.getResource(Day25.RESOURCE)!!.readText().trim().split("\n", "\r\n")
     val day25 = Day25(input)
     println("Day25::part1 -> ${day25.part1()}")
 }

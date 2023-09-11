@@ -3,9 +3,9 @@ package at.gnu.adventofcode.year2021
 class Day12(input: List<String>) {
 
     companion object {
-        const val input = "/adventofcode/year2021/Day12.txt"
-        const val start = "start"
-        const val end = "end"
+        const val RESOURCE = "/adventofcode/year2021/Day12.txt"
+        const val START = "start"
+        const val END = "end"
     }
 
     class Path(val from: String, val to: String)
@@ -14,14 +14,14 @@ class Day12(input: List<String>) {
         .flatMap { Pair(Path(it[0], it[1]), Path(it[1], it[0])).toList() }.toSet()
 
     fun part1(): Int =
-        paths.getPathsFrom(start).sumOf { it.countPaths() }
+        paths.getPathsFrom(START).sumOf { it.countPaths() }
 
     fun part2(): Int =
-        paths.getPathsFrom(start).sumOf { it.countPaths(twice = true) }
+        paths.getPathsFrom(START).sumOf { it.countPaths(twice = true) }
 
     private fun Path.countPaths(visitedCaves: Set<String> = emptySet(), twice: Boolean = false): Int {
-        val isEndPoint = (this.to == end)
-        val isSecondVisit = twice && (this.to != start) && this.to.isSmallCaveVisited(visitedCaves)
+        val isEndPoint = (this.to == END)
+        val isSecondVisit = twice && (this.to != START) && this.to.isSmallCaveVisited(visitedCaves)
         return when {
             isEndPoint -> 1
             isSecondVisit -> paths.getPathsFrom(this.to).sumOf { it.countPaths(visitedCaves + this.from, false) }
@@ -37,7 +37,7 @@ class Day12(input: List<String>) {
 }
 
 fun main() {
-    val input = Day12::class.java.getResource(Day12.input)!!.readText().trim().split("\n", "\r\n")
+    val input = Day12::class.java.getResource(Day12.RESOURCE)!!.readText().trim().split("\n", "\r\n")
     val day12 = Day12(input)
     println("Day12::part1 -> ${day12.part1()}")
     println("Day12::part2 -> ${day12.part2()}")

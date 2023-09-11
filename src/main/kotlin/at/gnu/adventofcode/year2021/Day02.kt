@@ -3,7 +3,7 @@ package at.gnu.adventofcode.year2021
 class Day02(commandLines: List<String>) {
 
     companion object {
-        const val input = "/adventofcode/year2021/Day02.txt"
+        const val RESOURCE = "/adventofcode/year2021/Day02.txt"
     }
 
     private val commands: List<Command> = commandLines.map { Command(it) }
@@ -58,7 +58,7 @@ class Day02(commandLines: List<String>) {
 }
 
 fun main() {
-    val input = Day02::class.java.getResource(Day02.input)!!.readText().trim().split("\n", "\r\n")
+    val input = Day02::class.java.getResource(Day02.RESOURCE)!!.readText().trim().split("\n", "\r\n")
     val day02 = Day02(input)
     println("Day02::part1 -> ${day02.part1()}")
     println("Day02::part2 -> ${day02.part2()}")

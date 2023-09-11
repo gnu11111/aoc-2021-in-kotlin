@@ -5,7 +5,7 @@ import java.lang.Long.parseLong
 class Day16(transmission: String) {
 
     companion object {
-        const val input = "/adventofcode/year2021/Day16.txt"
+        const val RESOURCE = "/adventofcode/year2021/Day16.txt"
     }
 
     private val binary = transmission.map { it.toBinary() }.joinToString("")
@@ -122,7 +122,7 @@ class Day16(transmission: String) {
 }
 
 fun main() {
-    val day16 = Day16(Day16::class.java.getResource(Day16.input)!!.readText().trim())
+    val day16 = Day16(Day16::class.java.getResource(Day16.RESOURCE)!!.readText().trim())
     println("Day16::part1 -> ${day16.part1()}")
     println("Day16::part2 -> ${day16.part2()}")
 }

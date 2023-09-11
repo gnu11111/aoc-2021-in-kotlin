@@ -3,7 +3,7 @@ package at.gnu.adventofcode.year2021
 class Day14(private val polymerTemplate: String, pairInsertionRulesFromInput: List<String>) {
 
     companion object {
-        const val input = "/adventofcode/year2021/Day14.txt"
+        const val RESOURCE = "/adventofcode/year2021/Day14.txt"
     }
 
     private val pairInsertionRules = pairInsertionRulesFromInput.map { it.split(" -> ") }
@@ -53,7 +53,7 @@ class Day14(private val polymerTemplate: String, pairInsertionRulesFromInput: Li
 }
 
 fun main() {
-    val (polymerTemplate, pairInsertionRules) = Day14::class.java.getResource(Day14.input)!!.readText().trim()
+    val (polymerTemplate, pairInsertionRules) = Day14::class.java.getResource(Day14.RESOURCE)!!.readText().trim()
         .split("\n\n", "\r\n\r\n").map { it.split("\n", "\r\n") }
     val day14 = Day14(polymerTemplate.first(), pairInsertionRules)
     println("Day14::part1 -> ${day14.part1()}")

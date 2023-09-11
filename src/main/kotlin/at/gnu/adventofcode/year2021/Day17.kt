@@ -8,7 +8,7 @@ import kotlin.math.sign
 class Day17(targetAreaFromInput: String) {
 
     companion object {
-        const val input = "/adventofcode/year2021/Day17.txt"
+        const val RESOURCE = "/adventofcode/year2021/Day17.txt"
         private val targetAreaCommand = """target area: x=(-?\d+)\.\.(-?\d+), y=(-?\d+)\.\.(-?\d+)""".toRegex()
     }
 
@@ -59,7 +59,7 @@ class Day17(targetAreaFromInput: String) {
 }
 
 fun main() {
-    val day17 = Day17(Day17::class.java.getResource(Day17.input)!!.readText().trim())
+    val day17 = Day17(Day17::class.java.getResource(Day17.RESOURCE)!!.readText().trim())
     println("Day17::part1 = ${day17.part1()}")
     println("Day17::part2 = ${day17.part2()}")
 }

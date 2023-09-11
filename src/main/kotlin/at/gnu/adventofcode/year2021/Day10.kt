@@ -3,7 +3,7 @@ package at.gnu.adventofcode.year2021
 class Day10(private val navigationSubsystem: List<String>) {
 
     companion object {
-        const val input = "/adventofcode/year2021/Day10.txt"
+        const val RESOURCE = "/adventofcode/year2021/Day10.txt"
         val scoresPart1 = mapOf(')' to 3, ']' to 57, '}' to 1197, '>' to 25137)
         val scoresPart2 = mapOf('(' to 1, '[' to 2, '{' to 3, '<' to 4)
     }
@@ -38,7 +38,7 @@ class Day10(private val navigationSubsystem: List<String>) {
 }
 
 fun main() {
-    val navigationSubsystem = Day10::class.java.getResource(Day10.input)!!.readText().trim().split("\n", "\r\n")
+    val navigationSubsystem = Day10::class.java.getResource(Day10.RESOURCE)!!.readText().trim().split("\n", "\r\n")
     val day10 = Day10(navigationSubsystem)
     println("Day10::part1 -> ${day10.part1()}")
     println("Day10::part2 -> ${day10.part2()}")

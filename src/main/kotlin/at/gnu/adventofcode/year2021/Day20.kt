@@ -3,8 +3,8 @@ package at.gnu.adventofcode.year2021
 class Day20(private val imageEnhancingAlgorithm: String, private val scannerImage: List<String>) {
 
     companion object {
-        const val input = "/adventofcode/year2021/Day20.txt"
-        const val litPixel = '#'
+        const val RESOURCE = "/adventofcode/year2021/Day20.txt"
+        const val LIT_PIXEL = '#'
     }
 
     fun part1(): Int =
@@ -28,7 +28,7 @@ class Day20(private val imageEnhancingAlgorithm: String, private val scannerImag
         }
 
     private fun List<String>.countLitPixels(): Int =
-        this.sumOf { line -> line.count { it == litPixel } }
+        this.sumOf { line -> line.count { it == LIT_PIXEL } }
 
     private fun List<String>.algorithmIndexFor(x: Int, y: Int, defaultColor: Boolean = false): Int =
         this.binaryIndexAt(x, y, defaultColor).binaryToInt()
@@ -47,11 +47,11 @@ class Day20(private val imageEnhancingAlgorithm: String, private val scannerImag
         if (this.pixelAt(x, y, defaultColor)) "1" else "0"
 
     private fun List<String>.pixelAt(x: Int, y: Int, defaultColor: Boolean = false): Boolean =
-        this.elementAtOrNull(y)?.elementAtOrNull(x)?.equals(litPixel) ?: defaultColor
+        this.elementAtOrNull(y)?.elementAtOrNull(x)?.equals(LIT_PIXEL) ?: defaultColor
 }
 
 fun main() {
-    val (imageEnhancingAlgorithm, scannerImage) = Day20::class.java.getResource(Day20.input)!!.readText().trim()
+    val (imageEnhancingAlgorithm, scannerImage) = Day20::class.java.getResource(Day20.RESOURCE)!!.readText().trim()
         .split("\n\n", "\r\n\r\n").map { it.split("\n", "\r\n") }
     val day20 = Day20(imageEnhancingAlgorithm.first(), scannerImage)
     println("Day20::part1 -> ${day20.part1()}")

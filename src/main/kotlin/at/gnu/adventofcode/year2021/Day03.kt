@@ -5,7 +5,7 @@ import kotlin.math.pow
 class Day03(private val diagnosticReport: List<String>) {
 
     companion object {
-        const val input = "/adventofcode/year2021/Day03.txt"
+        const val RESOURCE = "/adventofcode/year2021/Day03.txt"
     }
 
     enum class FilterType { MAJORITY, MINORITY }
@@ -50,7 +50,7 @@ class Day03(private val diagnosticReport: List<String>) {
 }
 
 fun main() {
-    val diagnosticReport = Day03::class.java.getResource(Day03.input)!!.readText().trim().split("\n", "\r\n")
+    val diagnosticReport = Day03::class.java.getResource(Day03.RESOURCE)!!.readText().trim().split("\n", "\r\n")
     val day03 = Day03(diagnosticReport)
     println("Day03::part1 -> ${day03.part1()}")
     println("Day03::part2 -> ${day03.part2()}")

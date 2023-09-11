@@ -5,14 +5,14 @@ import java.util.Collections.rotate
 class Day06(input: List<Int>) {
 
     companion object {
-        const val input = "/adventofcode/year2021/Day06.txt"
-        const val numberOfDaysTillReproduction = 8
+        const val RESOURCE = "/adventofcode/year2021/Day06.txt"
+        const val NUMBER_OF_DAYS_TILL_REPRODUCTION = 8
     }
 
     private val reproductionTimers: List<Long>
 
     init {
-        val timersFromInput = MutableList(numberOfDaysTillReproduction + 1) { 0L }
+        val timersFromInput = MutableList(NUMBER_OF_DAYS_TILL_REPRODUCTION + 1) { 0L }
         for (timer in input)
             timersFromInput[timer]++
         reproductionTimers = timersFromInput.toList()
@@ -28,7 +28,7 @@ class Day06(input: List<Int>) {
         val processTimers = reproductionTimers.toMutableList()
         repeat(days) {
             rotate(processTimers, -1)
-            processTimers[numberOfDaysTillReproduction - 2] += processTimers[numberOfDaysTillReproduction]
+            processTimers[NUMBER_OF_DAYS_TILL_REPRODUCTION - 2] += processTimers[NUMBER_OF_DAYS_TILL_REPRODUCTION]
         }
         return processTimers
     }
@@ -38,7 +38,7 @@ class Day06(input: List<Int>) {
 }
 
 fun main() {
-    val input = Day06::class.java.getResource(Day06.input)!!.readText().trim().split(",").map { it.toInt() }
+    val input = Day06::class.java.getResource(Day06.RESOURCE)!!.readText().trim().split(",").map { it.toInt() }
     val day06 = Day06(input)
     println("Day06::part1 -> ${day06.part1()}")
     println("Day06::part2 -> ${day06.part2()}")

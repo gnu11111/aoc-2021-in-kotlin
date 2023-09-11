@@ -3,8 +3,8 @@ package at.gnu.adventofcode.year2021
 class Day04(input: List<String>) {
 
     companion object {
-        const val input = "/adventofcode/year2021/Day04.txt"
-        const val boardSize = 5
+        const val RESOURCE = "/adventofcode/year2021/Day04.txt"
+        const val BOARD_SIZE = 5
     }
 
     class Board(val winningNumbers: Set<Set<Int>>)
@@ -14,11 +14,11 @@ class Day04(input: List<String>) {
 
     init {
         val newBoards = mutableListOf<Board>()
-        for (i in 0 until ((input.size - 1) / (boardSize + 1))) {
+        for (i in 0 until ((input.size - 1) / (BOARD_SIZE + 1))) {
             val winningNumbers = mutableSetOf<Set<Int>>()
-            val colNumbers = MutableList(boardSize) { mutableSetOf<Int>() }
-            for (j in 0 until boardSize) {
-                val line = (i * (boardSize + 1)) + j + 2
+            val colNumbers = MutableList(BOARD_SIZE) { mutableSetOf<Int>() }
+            for (j in 0 until BOARD_SIZE) {
+                val line = (i * (BOARD_SIZE + 1)) + j + 2
                 val rowNumbers = input[line].trim().split("""\s+""".toRegex()).map { it.toInt() }
                 rowNumbers.forEachIndexed { row, number -> colNumbers[row].add(number) }
                 winningNumbers.add(rowNumbers.toSet())
@@ -61,7 +61,7 @@ class Day04(input: List<String>) {
 }
 
 fun main() {
-    val input = Day04::class.java.getResource(Day04.input)!!.readText().trim().split("\n", "\r\n")
+    val input = Day04::class.java.getResource(Day04.RESOURCE)!!.readText().trim().split("\n", "\r\n")
     val day04 = Day04(input)
     println("Day04::part1 -> ${day04.part1()}")
     println("Day04::part2 -> ${day04.part2()}")

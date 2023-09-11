@@ -3,7 +3,7 @@ package at.gnu.adventofcode.year2021
 class Day23(input: List<String>) {
 
     companion object {
-        const val input = "/adventofcode/year2021/Day23.txt"
+        const val RESOURCE = "/adventofcode/year2021/Day23.txt"
     }
 
     class Amphipod(val type: Int, val slot: Int, val position: Int)
@@ -312,7 +312,7 @@ class Day23(input: List<String>) {
 }
 
 fun main() {
-    val input = Day23::class.java.getResource(Day23.input)!!.readText().trim().split("\n")
+    val input = Day23::class.java.getResource(Day23.RESOURCE)!!.readText().trim().split("\n")
     val day23 = Day23(input)
     println("Day23::part1 -> ${day23.part1()}")
     println("Day23::part2 -> ${day23.part2()}")

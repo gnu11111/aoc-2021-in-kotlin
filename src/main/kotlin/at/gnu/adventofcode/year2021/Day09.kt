@@ -3,9 +3,9 @@ package at.gnu.adventofcode.year2021
 class Day09(val input: List<String>) {
 
     companion object {
-        const val input = "/adventofcode/year2021/Day09.txt"
-        const val threshold = 9
-        val outOfBounds = Point(0, 0, threshold + 1)
+        const val RESOURCE = "/adventofcode/year2021/Day09.txt"
+        const val THRESHOLD = 9
+        val outOfBounds = Point(0, 0, THRESHOLD + 1)
     }
 
     class Point(val x: Int, val y: Int, val value: Int)
@@ -20,7 +20,7 @@ class Day09(val input: List<String>) {
 
     private fun Point.fillBasin(points: Set<Point>): Set<Point> =
         when {
-            (this.value >= threshold) || (this in points) -> points
+            (this.value >= THRESHOLD) || (this in points) -> points
             else -> this.adjacentPoints().fold(points + this) { acc, point -> point.fillBasin(acc) }
         }
 
@@ -38,7 +38,7 @@ class Day09(val input: List<String>) {
 }
 
 fun main() {
-    val input = Day09::class.java.getResource(Day09.input)!!.readText().trim().split("\n", "\r\n")
+    val input = Day09::class.java.getResource(Day09.RESOURCE)!!.readText().trim().split("\n", "\r\n")
     val day09 = Day09(input)
     println("Day09::part1 -> ${day09.part1()}")
     println("Day09::part2 -> ${day09.part2()}")

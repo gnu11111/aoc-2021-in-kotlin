@@ -3,8 +3,8 @@ package at.gnu.adventofcode.year2021
 class Day11(val input: List<String>) {
 
     companion object {
-        const val input = "/adventofcode/year2021/Day11.txt"
-        const val energyThreshold = 9
+        const val RESOURCE = "/adventofcode/year2021/Day11.txt"
+        const val ENERGY_THRESHOLD = 9
         val outOfBounds = Octopus(-1, -1, 0)
     }
 
@@ -34,12 +34,12 @@ class Day11(val input: List<String>) {
         this.map { it.energyLevel = it.initialLevel }
 
     private fun List<Octopus>.resetEnergyAndCountFlashes() =
-        this.filter { it.energyLevel > energyThreshold }.map { it.energyLevel = 0 }.count()
+        this.filter { it.energyLevel > ENERGY_THRESHOLD }.map { it.energyLevel = 0 }.count()
 
     private fun Octopus.increaseEnergy(octopusses: Set<Octopus> = emptySet()): Set<Octopus> =
         when {
             (this === outOfBounds) || (this in octopusses) -> octopusses
-            (this.energyLevel == energyThreshold) -> this.increaseEnergyAndAffectNeighbors(octopusses)
+            (this.energyLevel == ENERGY_THRESHOLD) -> this.increaseEnergyAndAffectNeighbors(octopusses)
             else -> { this.energyLevel++; octopusses }
         }
 
@@ -60,7 +60,7 @@ class Day11(val input: List<String>) {
 }
 
 fun main() {
-    val input = Day11::class.java.getResource(Day11.input)!!.readText().trim().split("\n", "\r\n")
+    val input = Day11::class.java.getResource(Day11.RESOURCE)!!.readText().trim().split("\n", "\r\n")
     val day11 = Day11(input)
     println("Day11::part1 -> ${day11.part1()}")
     println("Day11::part2 -> ${day11.part2()}")

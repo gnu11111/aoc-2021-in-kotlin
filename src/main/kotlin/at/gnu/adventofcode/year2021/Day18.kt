@@ -3,8 +3,8 @@ package at.gnu.adventofcode.year2021
 class Day18(private val numbers: List<String>) {
 
     companion object {
-        const val input = "/adventofcode/year2021/Day18.txt"
-        const val threshold = 4
+        const val RESOURCE = "/adventofcode/year2021/Day18.txt"
+        const val THRESHOLD = 4
         private val snailFishNumber = """\[(\d+),(\d+)""".toRegex()
     }
 
@@ -30,7 +30,7 @@ class Day18(private val numbers: List<String>) {
         var i = -1
         while (++i < (number.length - 1)) {
             if (number[i] == '[') {
-                if (++brackets > threshold) {
+                if (++brackets > THRESHOLD) {
                     val newNumber = number.explode(i)
                     if (newNumber != number) {
                         number = newNumber
@@ -123,7 +123,7 @@ class Day18(private val numbers: List<String>) {
 }
 
 fun main() {
-    val numbers = Day18::class.java.getResource(Day18.input)!!.readText().trim().split("\n", "\r\n")
+    val numbers = Day18::class.java.getResource(Day18.RESOURCE)!!.readText().trim().split("\n", "\r\n")
     val day18 = Day18(numbers)
     println("Day18::part1 -> ${day18.part1()}")
     println("Day18::part2 -> ${day18.part2()}")

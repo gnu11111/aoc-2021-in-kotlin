@@ -3,7 +3,7 @@ package at.gnu.adventofcode.year2021
 class Day22(input: List<String>) {
 
     companion object {
-        const val input = "/adventofcode/year2021/Day22.txt"
+        const val RESOURCE = "/adventofcode/year2021/Day22.txt"
         val command = """(on|off)\s+x=(-?\d+)\.\.(-?\d+),y=(-?\d+)\.\.(-?\d+),z=(-?\d+)\.\.(-?\d+)""".toRegex()
         val boundary = BootStep(region = Region(-50..50, -50..50, -50..50))
     }
@@ -63,7 +63,7 @@ class Day22(input: List<String>) {
 }
 
 fun main() {
-    val input = Day22::class.java.getResource(Day22.input)!!.readText().trim().split("\n", "\r\n")
+    val input = Day22::class.java.getResource(Day22.RESOURCE)!!.readText().trim().split("\n", "\r\n")
     val day22 = Day22(input)
     println("Day22::part1 -> ${day22.part1()}")
     println("Day22::part2 -> ${day22.part2()}")

@@ -3,12 +3,12 @@ package at.gnu.adventofcode.year2021
 class Day24(source: List<String>) {
 
     companion object {
-        const val input = "/adventofcode/year2021/Day24.txt"
-        const val digits = 14
-        const val w = "w"
-        const val x = "x"
-        const val y = "y"
-        const val z = "z"
+        const val RESOURCE = "/adventofcode/year2021/Day24.txt"
+        const val DIGITS = 14
+        const val W = "w"
+        const val X = "x"
+        const val Y = "y"
+        const val Z = "z"
         val statement = """(inp|add|mul|div|mod|eql)\s+([wxyz])(\s+(-?\d+|[wxyz]))*""".toRegex()
     }
 
@@ -51,7 +51,7 @@ class Day24(source: List<String>) {
         transitions[0] = mutableSetOf(Transition())
         var result = Result()
         var runFromLine = 0
-        for (i in 1..digits) {
+        for (i in 1..DIGITS) {
             transitions[i] = mutableSetOf()
             for (previousTransition in transitions[i-1]!!)
                 for (digit in digitRange) {
@@ -66,11 +66,11 @@ class Day24(source: List<String>) {
 
     private fun List<Statement>.executeCodeUntilNextInput(input: Int, runFromLine: Int = 0,
                                                           initialZvalue: Int = 0): Result {
-        val r = mutableMapOf(w to 0, x to 0, y to 0, z to initialZvalue)
+        val r = mutableMapOf(W to 0, X to 0, Y to 0, Z to initialZvalue)
         var firstInp = true
         for (line in runFromLine until this.size) {
             when (val it = this[line]) {
-                is Inp -> if (firstInp) { r[it.a] = input; firstInp = false } else return Result(line, r[z]!!)
+                is Inp -> if (firstInp) { r[it.a] = input; firstInp = false } else return Result(line, r[Z]!!)
                 is Add -> r[it.a] = r[it.a]!! + (it.value ?: r[it.b]!!)
                 is Mul -> r[it.a] = r[it.a]!! * (it.value ?: r[it.b]!!)
                 is Div -> r[it.a] = r[it.a]!! / (it.value ?: r[it.b]!!)
@@ -78,15 +78,15 @@ class Day24(source: List<String>) {
                 is Eql -> r[it.a] = if (r[it.a]!! == (it.value ?: r[it.b]!!)) 1 else 0
             }
         }
-        return Result(this.size, r[z]!!)
+        return Result(this.size, r[Z]!!)
     }
 
     private fun Map<Int, Set<Transition>>.calculateModelNumber(): Long {
         var value = 0
         var power = 1L
         var modelNumber = 0L
-        for (i in 0 until digits) {
-            val transition = this[digits-i]!!.firstOrNull { it.value == value } ?: return -1L
+        for (i in 0 until DIGITS) {
+            val transition = this[DIGITS-i]!!.firstOrNull { it.value == value } ?: return -1L
             value = transition.previousValue
             modelNumber += (power * transition.digit)
             power *= 10
@@ -96,7 +96,7 @@ class Day24(source: List<String>) {
 }
 
 fun main() {
-    val source = Day24::class.java.getResource(Day24.input)!!.readText().trim().split("\n", "\r\n")
+    val source = Day24::class.java.getResource(Day24.RESOURCE)!!.readText().trim().split("\n", "\r\n")
     val day24 = Day24(source)
     println("Day24::part1 -> ${day24.part1()}")
     println("Day24::part2 -> ${day24.part2()}")

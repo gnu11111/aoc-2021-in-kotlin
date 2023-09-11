@@ -3,8 +3,8 @@ package at.gnu.adventofcode.year2021
 class Day13(dotsFromInput: List<String>, foldingsFromInput: List<String>) {
 
     companion object {
-        const val resource = "/adventofcode/year2021/Day13.txt"
-        const val verticalFolderType = "x"
+        const val RESOURCE = "/adventofcode/year2021/Day13.txt"
+        const val VERTICAL_FOLDER_TYPE = "x"
         private val foldingCommand = """fold along ([xy])=(\d+)""".toRegex()
         private val outOfBounds = Dot(-1, -1)
     }
@@ -15,7 +15,7 @@ class Day13(dotsFromInput: List<String>, foldingsFromInput: List<String>) {
     private val dots = dotsFromInput.map { it.split(",") }.map { Dot(it[0].toInt(), it[1].toInt()) }.toSet()
     private val foldings = foldingsFromInput.map {
         val (type, amount) = foldingCommand.matchEntire(it)!!.destructured
-        if (type == verticalFolderType) VerticalFolding(amount.toInt()) else HorizontalFolding(amount.toInt())
+        if (type == VERTICAL_FOLDER_TYPE) VerticalFolding(amount.toInt()) else HorizontalFolding(amount.toInt())
     }
 
     fun part1(): Int =
@@ -43,7 +43,7 @@ class Day13(dotsFromInput: List<String>, foldingsFromInput: List<String>) {
 }
 
 fun main() {
-    val (dots, foldings) = Day13::class.java.getResource(Day13.resource)!!.readText().trim()
+    val (dots, foldings) = Day13::class.java.getResource(Day13.RESOURCE)!!.readText().trim()
         .split("\n\n", "\r\n\r\n").map { it.split("\n", "\r\n") }
     val day13 = Day13(dots, foldings)
     println("Day13::part1 -> ${day13.part1()}")

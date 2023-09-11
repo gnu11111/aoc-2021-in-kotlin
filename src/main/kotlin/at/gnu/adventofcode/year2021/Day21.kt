@@ -5,10 +5,10 @@ import kotlin.math.max
 class Day21(input: List<String>) {
 
     companion object {
-        const val input = "/adventofcode/year2021/Day21.txt"
-        const val rollsPerRound = 3
-        const val normalGameWinningScore = 1000
-        const val dircacGameWinningScore = 21
+        const val RESOURCE = "/adventofcode/year2021/Day21.txt"
+        const val ROLLS_PER_ROUND = 3
+        const val NORMAL_GAME_WINNING_SCORE = 1000
+        const val DIRAC_GAME_WINNING_SCORE = 21
         val command = """Player (\d+) starting position: (\d+)""".toRegex()
     }
 
@@ -37,7 +37,7 @@ class Day21(input: List<String>) {
                 for (dice3 in 1..3) {
                     val newPos = ((pos1 + dice1 + dice2 + dice3 - 1) % 10) + 1
                     val newScore = score1 + newPos
-                    if (newScore >= dircacGameWinningScore)
+                    if (newScore >= DIRAC_GAME_WINNING_SCORE)
                         wins[0]++
                     else {
                         val newWins = playDiracGame(pos2, newPos, score2, newScore, memo)
@@ -57,8 +57,8 @@ class Day21(input: List<String>) {
 
     private fun Game.playNormalGame(): Long {
         while (true) {
-            this.playNormalRound(rollsPerRound)
-            if (this.player.score >= normalGameWinningScore)
+            this.playNormalRound(ROLLS_PER_ROUND)
+            if (this.player.score >= NORMAL_GAME_WINNING_SCORE)
                 return (this.otherPlayer().score * this.rolls).toLong()
             this.switchPlayer()
         }
@@ -82,7 +82,7 @@ class Day21(input: List<String>) {
 }
 
 fun main() {
-    val input = Day21::class.java.getResource(Day21.input)!!.readText().trim().split("\n", "\r\n")
+    val input = Day21::class.java.getResource(Day21.RESOURCE)!!.readText().trim().split("\n", "\r\n")
     val day21 = Day21(input)
     println("Day21::part1 -> ${day21.part1()}")
     println("Day21::part2 -> ${day21.part2()}")

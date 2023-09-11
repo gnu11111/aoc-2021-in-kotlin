@@ -6,8 +6,8 @@ import kotlin.math.max
 class Day05(input: List<String>) {
 
     companion object {
-        const val input = "/adventofcode/year2021/Day05.txt"
-        const val dangerousAmount = 2
+        const val RESOURCE = "/adventofcode/year2021/Day05.txt"
+        const val DANGEROUS_AMOUNT = 2
     }
 
     data class Coordinate(val x: Int, val y: Int)
@@ -44,12 +44,12 @@ class Day05(input: List<String>) {
                 coordinates[coordinate] = (coordinates[coordinate] ?: 0) + 1
             }
         }
-        return coordinates.values.count { it >= dangerousAmount }
+        return coordinates.values.count { it >= DANGEROUS_AMOUNT }
     }
 }
 
 fun main() {
-    val input = Day05::class.java.getResource(Day05.input)!!.readText().trim().split("\n", "\r\n")
+    val input = Day05::class.java.getResource(Day05.RESOURCE)!!.readText().trim().split("\n", "\r\n")
     val day05 = Day05(input)
     println("Day05::part1 -> ${day05.part1()}")
     println("Day05::part2 -> ${day05.part2()}")
